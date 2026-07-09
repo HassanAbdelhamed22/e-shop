@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import { connectDB } from "./src/config/database.ts";
 import Category from "./src/models/category.model.ts";
+import { createCategory } from "./src/controllers/category.controller.ts";
 
 dotenv.config({ path: "config.env" });
 
@@ -18,16 +19,7 @@ if (process.env.NODE_ENV === "development") {
 
 
 
-app.post("/", async (req, res) => {
-  try {
-    const name = req.body.name;
-    const category = await Category.create({ name });
-    res.status(201).json({ category });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error creating category" });
-  }
-});
+app.post("/", createCategory);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
