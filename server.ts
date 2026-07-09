@@ -8,7 +8,9 @@ dotenv.config({ path: "config.env" });
 const dbUri = process.env.MONGO_URI || process.env.MONGO_URL;
 
 if (!dbUri) {
-  console.error("Error: MONGO_URI or MONGO_URL is not defined in the environment variables.");
+  console.error(
+    "Error: MONGO_URI or MONGO_URL is not defined in the environment variables.",
+  );
   process.exit(1);
 }
 
@@ -25,9 +27,28 @@ mongoose
 
 const app = express();
 
+app.use(express.json());
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+const categorySchema = new mongoose.Schema({
+  name: String,
+});
+
+const Category = mongoose.model("Category", categorySchema);
+
+app.post("/", async (req, res) => {
+  try {
+    const name = req.body.name;
+    const category = await Category.create({ name });
+    res.status(201).json({ category });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error creating category" });
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
