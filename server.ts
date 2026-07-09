@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import mongoose from "mongoose";
 import { connectDB } from "./src/config/database.ts";
+import Category from "./src/models/category.model.ts";
 
 dotenv.config({ path: "config.env" });
 
@@ -16,11 +16,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-const categorySchema = new mongoose.Schema({
-  name: String,
-});
 
-const Category = mongoose.model("Category", categorySchema);
 
 app.post("/", async (req, res) => {
   try {
