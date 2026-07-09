@@ -2,29 +2,26 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import { connectDB } from "./src/config/database.ts";
-import Category from "./src/models/category.model.ts";
-import { createCategory } from "./src/controllers/category.controller.ts";
+import categoryRouter from "./src/routes/category.route.ts";
 
 dotenv.config({ path: "config.env" });
 
+// Connect to database
 connectDB();
 
 const app = express();
 
+// Middleware
 app.use(express.json());
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+// Routes
+app.use("/api/v1/categories", categoryRouter);
 
-
-app.post("/", createCategory);
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(
