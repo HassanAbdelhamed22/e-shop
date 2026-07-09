@@ -2,28 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import { connectDB } from "./src/config/database.ts";
 
 dotenv.config({ path: "config.env" });
 
-const dbUri = process.env.MONGO_URI || process.env.MONGO_URL;
-
-if (!dbUri) {
-  console.error(
-    "Error: MONGO_URI or MONGO_URL is not defined in the environment variables.",
-  );
-  process.exit(1);
-}
-
-// Connect to database
-mongoose
-  .connect(dbUri)
-  .then(() => {
-    console.log("Database connected");
-  })
-  .catch((err) => {
-    console.log(err);
-    process.exit(1);
-  });
+connectDB();
 
 const app = express();
 
