@@ -1,8 +1,21 @@
 import { Router } from "express";
-import { createCategory } from "../controllers/category.controller.ts";
+import {
+  createCategory,
+  getCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory,
+} from "../controllers/category.controller.ts";
 
 const router = Router();
 
-router.post("/", createCategory);
+router.route("/")
+  .post(createCategory)
+  .get(getCategories);
 
-export default router;
+router.route("/:id")
+  .get(getCategoryById)
+  .put(updateCategory)
+  .delete(deleteCategory);
+
+export default router;
