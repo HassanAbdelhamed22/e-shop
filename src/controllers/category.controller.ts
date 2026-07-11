@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import * as categoryService from "../services/category.service.ts";
 import type { ICategory } from "../types/index.ts";
+import { ApiError } from "../utils/apiError.ts";
 
 // @desc    Get All Categories
 // @route   GET /api/v1/categories
@@ -41,8 +42,7 @@ export const getCategoryById = async (
   const { id } = req.params;
   const category = await categoryService.getCategoryById(id);
   if (!category) {
-    res.status(404).json({ success: false, message: "Category not found" });
-    return;
+    throw new ApiError("Category not found", 404);
   }
   res.status(200).json({ success: true, data: { category } });
 };
@@ -67,8 +67,7 @@ export const updateCategory = async (
   const categoryData: Partial<ICategory> = req.body;
   const category = await categoryService.updateCategory(id, categoryData);
   if (!category) {
-    res.status(404).json({ success: false, message: "Category not found" });
-    return;
+    throw new ApiError("Category not found", 404);
   }
   res.status(200).json({ success: true, data: { category } });
 };
@@ -83,8 +82,7 @@ export const deleteCategory = async (
   const { id } = req.params;
   const category = await categoryService.deleteCategory(id);
   if (!category) {
-    res.status(404).json({ success: false, message: "Category not found" });
-    return;
+    throw new ApiError("Category not found", 404);
   }
   res
     .status(200)

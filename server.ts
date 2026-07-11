@@ -4,6 +4,7 @@ import morgan from "morgan";
 import { connectDB } from "./src/config/database.ts";
 import categoryRouter from "./src/routes/category.route.ts";
 import { globalError } from "./src/middlewares/error.middleware.ts";
+import { ApiError } from "./src/utils/apiError.ts";
 
 dotenv.config({ path: "config.env" });
 
@@ -24,8 +25,8 @@ app.use("/api/v1/categories", categoryRouter);
 
 // Handle invalid routes
 app.all("/*splat", (req, res, next) => {
-  const error = new Error(`Route ${req.originalUrl} not found`);
-  next(error.message);
+  // const error = new Error(`Route ${req.originalUrl} not found`);
+  next(new ApiError(`Route ${req.originalUrl} not found`, 404));
 });
 
 // Global Error Handling Middleware
