@@ -34,8 +34,17 @@ app.use(globalError);
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(
     `Server is running on port ${PORT} in ${process.env.NODE_ENV} mode`,
   );
+});
+
+// Handle rejection outside Express 
+process.on("unhandledRejection", (err: Error) => {
+  console.log(err.name, err.message);
+  console.log("UNHANDLED REJECTION! Shutting down...");
+  server.close(() => {
+    process.exit(1);
+  });
 });
