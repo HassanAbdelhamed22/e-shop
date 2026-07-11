@@ -13,7 +13,10 @@ export const getSubCategories = async (
   const skip = (page - 1) * limit;
 
   const [subCategories, totalCount] = await Promise.all([
-    SubCategory.find().skip(skip).limit(limit),
+    SubCategory.find().skip(skip).limit(limit).populate({
+      path: "category",
+      select: "name",
+    }),
     SubCategory.countDocuments(),
   ]);
 
