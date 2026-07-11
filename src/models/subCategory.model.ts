@@ -7,7 +7,7 @@ const subCategorySchema = new mongoose.Schema(
       trim: true,
       required: [true, "Subcategory name is required"],
       unique: [true, "Subcategory name already exists"],
-      minlength: [3, "Subcategory name must be at least 3 characters long"],
+      minlength: [2, "Subcategory name must be at least 2 characters long"],
       maxlength: [100, "Subcategory name must be at most 100 characters long"],
     },
     slug: {

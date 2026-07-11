@@ -10,8 +10,8 @@ export const createSubCategoryValidator = [
   check("name")
     .notEmpty()
     .withMessage("Subcategory name is required")
-    .isLength({ min: 3, max: 100 })
-    .withMessage("Subcategory name must be between 3 and 100 characters"),
+    .isLength({ min: 2, max: 100 })
+    .withMessage("Subcategory name must be between 2 and 100 characters"),
   check("category")
     .notEmpty()
     .withMessage("Category ID is required")
