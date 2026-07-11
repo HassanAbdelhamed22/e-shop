@@ -22,6 +22,12 @@ if (process.env.NODE_ENV === "development") {
 // Routes
 app.use("/api/v1/categories", categoryRouter);
 
+// Handle invalid routes
+app.all("/*splat", (req, res, next) => {
+  const error = new Error(`Route ${req.originalUrl} not found`);
+  next(error.message);
+});
+
 // Global Error Handling Middleware
 app.use(globalError);
 
@@ -32,4 +38,3 @@ app.listen(PORT, () => {
     `Server is running on port ${PORT} in ${process.env.NODE_ENV} mode`,
   );
 });
-
