@@ -3,6 +3,7 @@ import {
   createSubCategory,
   deleteSubCategory,
   getSubCategories,
+  getSubCategoriesByCategory,
   getSubCategoryById,
   updateSubCategory,
 } from "../controllers/subCategory.controller.ts";
@@ -12,7 +13,9 @@ import {
   getSubCategoryValidator,
   updateSubCategoryValidator,
 } from "../utils/validators/subCategoryValidator.ts";
-const router = Router();
+
+// mergeParams: Allow to access params from parent router (category router)
+const router = Router({ mergeParams: true });
 
 router
   .route("/")

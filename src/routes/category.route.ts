@@ -12,6 +12,7 @@ import {
   getCategoryValidator,
   updateCategoryValidator,
 } from "../utils/validators/categoryValidator.ts";
+import subCategoryRouter from "./subCategory.route.ts";
 
 const router = Router();
 
@@ -25,5 +26,7 @@ router
   .get(getCategoryValidator, getCategoryById)
   .put(updateCategoryValidator, updateCategory)
   .delete(deleteCategoryValidator, deleteCategory);
+
+router.use("/:categoryId/subcategories", subCategoryRouter);
 
 export default router;

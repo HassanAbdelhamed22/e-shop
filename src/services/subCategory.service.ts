@@ -9,18 +9,31 @@ import slugify from "slugify";
 export const getSubCategories = async (
   page: number = 1,
   limit: number = 10,
+  filter: Record<string, any> = {},
 ): Promise<{ subCategories: ISubCategory[]; totalCount: number }> => {
   const skip = (page - 1) * limit;
 
   const [subCategories, totalCount] = await Promise.all([
-    SubCategory.find().skip(skip).limit(limit).populate({
-      path: "category",
-      select: "name",
-    }),
-    SubCategory.countDocuments(),
+    SubCategory.find(filter).skip(skip).limit(limit),
+    SubCategory.countDocuments(filter),
   ]);
 
   return { subCategories, totalCount };
+};
+
+// @desc: Get subcategory by category ID
+// @route: GET /api/v1/categories/:categoryId/subcategories
+// @access: Public
+export const getSubCategoriesByCategory = async (
+  categoryId: string,
+): Promise<ISubCategory[]> => {
+  const subCategories = await SubCategory.find({
+    category: categoryId,
+  }).populate({
+    path: "category",
+    select: "name",
+  });
+  return subCategories;
 };
 
 // @desc: Get subcategory by ID

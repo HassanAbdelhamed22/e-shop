@@ -10,10 +10,13 @@ export const getSubCategories = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string, 10) || 1;
   const limit = parseInt(req.query.limit as string, 10) || 10;
 
-  const { subCategories, totalCount } = await subCategoryService.getSubCategories(
-    page,
-    limit,
-  );
+  let filterObject = {};
+  if (req.params.categoryId) {
+    filterObject = { category: req.params.categoryId };
+  }
+
+  const { subCategories, totalCount } =
+    await subCategoryService.getSubCategories(page, limit, filterObject);
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -30,6 +33,19 @@ export const getSubCategories = async (req: Request, res: Response) => {
     success: true,
     data: { subCategories, pagination },
   });
+};
+
+// @desc: Get subcategory by category ID
+// @route: GET /api/v1/categories/:categoryId/subcategories
+// @access: Public
+export const getSubCategoriesByCategory = async (
+  req: Request<{ categoryId: string }>,
+  res: Response,
+) => {
+  const { categoryId } = req.params;
+  const subCategories =
+    await subCategoryService.getSubCategoriesByCategory(categoryId);
+  res.status(200).json({ success: true, data: { subCategories } });
 };
 
 // @desc    Get Sub Category By Id
@@ -51,8 +67,9 @@ export const getSubCategoryById = async (
 // @route   POST /api/v1/subcategories
 // @access  Private
 export const createSubCategory = async (req: Request, res: Response) => {
-  const subCategoryData: ISubCategory = req.body;  
-  const subCategory = await subCategoryService.createSubCategory(subCategoryData);
+  const subCategoryData: ISubCategory = req.body;
+  const subCategory =
+    await subCategoryService.createSubCategory(subCategoryData);
   res.status(201).json({ success: true, data: { subCategory } });
 };
 
@@ -60,12 +77,15 @@ export const createSubCategory = async (req: Request, res: Response) => {
 // @route   PUT /api/v1/subcategories/:id
 // @access  Private
 export const updateSubCategory = async (
-  req: Request<{ id: string }>,  
+  req: Request<{ id: string }>,
   res: Response,
 ) => {
   const { id } = req.params;
   const subCategoryData: Partial<ISubCategory> = req.body;
-  const subCategory = await subCategoryService.updateSubCategory(id, subCategoryData);
+  const subCategory = await subCategoryService.updateSubCategory(
+    id,
+    subCategoryData,
+  );
   if (!subCategory) {
     throw new ApiError("Subcategory not found", 404);
   }
@@ -76,7 +96,7 @@ export const updateSubCategory = async (
 // @route   DELETE /api/v1/subcategories/:id
 // @access  Private
 export const deleteSubCategory = async (
-  req: Request<{ id: string }>,  
+  req: Request<{ id: string }>,
   res: Response,
 ) => {
   const { id } = req.params;
@@ -84,5 +104,7 @@ export const deleteSubCategory = async (
   if (!subCategory) {
     throw new ApiError("Subcategory not found", 404);
   }
-  res.status(200).json({ success: true, message: "Subcategory deleted successfully" });
+  res
+    .status(200)
+    .json({ success: true, message: "Subcategory deleted successfully" });
 };
