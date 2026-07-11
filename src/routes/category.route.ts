@@ -7,6 +7,7 @@ import {
   deleteCategory,
 } from "../controllers/category.controller.ts";
 import {
+  createCategoryValidator,
   deleteCategoryValidator,
   getCategoryValidator,
   updateCategoryValidator,
@@ -14,7 +15,10 @@ import {
 
 const router = Router();
 
-router.route("/").post(createCategory).get(getCategories);
+router
+  .route("/")
+  .get(getCategories)
+  .post(createCategoryValidator, createCategory);
 
 router
   .route("/:id")
