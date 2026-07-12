@@ -5,25 +5,29 @@ import slugify from "slugify";
 export const getProducts = async (
   page: number = 1,
   limit: number = 10,
+  filter: Record<string, any> = {},
 ): Promise<{ products: IProduct[]; totalCount: number }> => {
   const skip = (page - 1) * limit;
 
+  // Build query
+  let mongooseQuery = Product.find(filter)
+    .populate({ path: "category", select: "name" })
+    .populate({ path: "subCategories", select: "name" })
+    .populate({ path: "brand", select: "name" });
+
+  // pagination
+  mongooseQuery = mongooseQuery.skip(skip).limit(limit);
+
+  // Execute Query
   const [products, totalCount] = await Promise.all([
-    Product.find()
-      .populate({ path: "category", select: "name" })
-      .populate({ path: "subCategories", select: "name" })
-      .populate({ path: "brand", select: "name" })
-      .skip(skip)
-      .limit(limit),
-    Product.countDocuments(),
+    mongooseQuery,
+    Product.countDocuments(filter),
   ]);
 
   return { products, totalCount };
 };
 
-export const getProductById = async (
-  id: string,
-): Promise<IProduct | null> => {
+export const getProductById = async (id: string): Promise<IProduct | null> => {
   const product = await Product.findById(id)
     .populate({ path: "category", select: "name" })
     .populate({ path: "subCategories", select: "name" })

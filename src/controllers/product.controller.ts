@@ -10,9 +10,20 @@ export const getProducts = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string, 10) || 1;
   const limit = parseInt(req.query.limit as string, 10) || 10;
 
+  // 1) Filter query parameters
+  const queryObj = { ...req.query };
+  const excludeFields = ["page", "limit", "sort", "fields", "keyword"];
+  excludeFields.forEach((field) => delete queryObj[field]);
+
+  // 2) Map operators (gte, gt, lte, lt) to mongoose query operators ($gte, $gt, $lte, $lt)
+  let queryStr = JSON.stringify(queryObj);
+  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+  const filter = JSON.parse(queryStr);
+
   const { products, totalCount } = await productService.getProducts(
     page,
     limit,
+    filter,
   );
 
   const totalPages = Math.ceil(totalCount / limit);
