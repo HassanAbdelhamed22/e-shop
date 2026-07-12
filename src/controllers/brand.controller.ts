@@ -32,14 +32,7 @@ export const getBrandById = async (
   res.status(200).json({ success: true, data: { brand } });
 };
 
-// @desc    Create Brand
-// @route   POST /api/v1/brands
-// @access  Private
-export const createBrand = async (req: Request, res: Response) => {
-  const brandData: IBrand = req.body;
-  const brand = await brandService.createBrand(brandData);
-  res.status(201).json({ success: true, data: { brand } });
-};
+export const createBrand = controllerFactory.createOne(Brand);
 
 // @desc    Update Brand
 // @route   PUT /api/v1/brands/:id

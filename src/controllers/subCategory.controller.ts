@@ -68,18 +68,7 @@ export const getSubCategoryById = async (
   res.status(200).json({ success: true, data: { subCategory } });
 };
 
-// @desc    Create Sub Category
-// @route   POST /api/v1/subcategories
-// @access  Private
-export const createSubCategory = async (req: Request, res: Response) => {
-  // nested route (create sub category)
-  if (!req.body.category) req.body.category = req.params.categoryId;
-
-  const subCategoryData: ISubCategory = req.body;
-  const subCategory =
-    await subCategoryService.createSubCategory(subCategoryData);
-  res.status(201).json({ success: true, data: { subCategory } });
-};
+export const createSubCategory = controllerFactory.createOne(SubCategory);
 
 // @desc    Update Sub Category
 // @route   PUT /api/v1/subcategories/:id

@@ -32,14 +32,11 @@ export const getProductById = async (
   res.status(200).json({ success: true, data: { product } });
 };
 
-// @desc    Create Product
-// @route   POST /api/v1/products
-// @access  Private
-export const createProduct = async (req: Request, res: Response) => {
-  const productData: IProduct = req.body;
-  const product = await productService.createProduct(productData);
-  res.status(201).json({ success: true, data: { product } });
-};
+export const createProduct = controllerFactory.createOne(Product, [
+  { path: "category", select: "name" },
+  { path: "subCategories", select: "name" },
+  { path: "brand", select: "name" },
+]);
 
 // @desc    Update Product
 // @route   PUT /api/v1/products/:id

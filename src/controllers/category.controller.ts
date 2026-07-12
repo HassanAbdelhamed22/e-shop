@@ -32,14 +32,7 @@ export const getCategoryById = async (
   res.status(200).json({ success: true, data: { category } });
 };
 
-// @desc    Create Category
-// @route   POST /api/v1/categories
-// @access  Private
-export const createCategory = async (req: Request, res: Response) => {
-  const categoryData: ICategory = req.body;
-  const category = await categoryService.createCategory(categoryData);
-  res.status(201).json({ success: true, data: { category } });
-};
+export const createCategory = controllerFactory.createOne(Category);
 
 // @desc    Update Category
 // @route   PUT /api/v1/categories/:id

@@ -4,14 +4,16 @@ import { ApiFeatures } from "../utils/apiFeatures.ts";
 import type { PaginationResult } from "../utils/apiFeatures.ts";
 
 export const getProducts = async (
-  queryString: any
+  queryString: any,
 ): Promise<{ products: IProduct[]; pagination: PaginationResult }> => {
   // 1) Get the total documents matching the filters & search keyword (before paginating)
   const countFeatures = new ApiFeatures(Product.find(), queryString)
     .filter()
     .search("Product");
 
-  const totalCount = await Product.countDocuments(countFeatures.mongooseQuery.getFilter());
+  const totalCount = await Product.countDocuments(
+    countFeatures.mongooseQuery.getFilter(),
+  );
 
   // 2) Build and execute the full query with pagination, sorting, search, and projection
   const apiFeatures = new ApiFeatures(Product.find(), queryString)
@@ -37,20 +39,5 @@ export const getProductById = async (id: string): Promise<IProduct | null> => {
     .populate({ path: "category", select: "name" })
     .populate({ path: "subCategories", select: "name" })
     .populate({ path: "brand", select: "name" });
-  return product;
-};
-
-export const createProduct = async (
-  productData: IProduct,
-): Promise<IProduct> => {
-  if (!productData.title) {
-    throw new Error("Product title is required");
-  }
-  let product = await Product.create(productData);
-  product = await product.populate([
-    { path: "category", select: "name" },
-    { path: "subCategories", select: "name" },
-    { path: "brand", select: "name" },
-  ]);
   return product;
 };

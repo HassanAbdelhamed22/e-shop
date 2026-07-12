@@ -10,7 +10,9 @@ export const getBrands = async (
     .filter()
     .search("Brand");
 
-  const totalCount = await Brand.countDocuments(countFeatures.mongooseQuery.getFilter());
+  const totalCount = await Brand.countDocuments(
+    countFeatures.mongooseQuery.getFilter(),
+  );
 
   const apiFeatures = new ApiFeatures(Brand.find(), queryString)
     .filter()
@@ -24,19 +26,7 @@ export const getBrands = async (
   return { brands, pagination: apiFeatures.paginationResult! };
 };
 
-export const getBrandById = async (
-  id: string,
-): Promise<IBrand | null> => {
+export const getBrandById = async (id: string): Promise<IBrand | null> => {
   const brand = await Brand.findById(id);
-  return brand;
-};
-
-export const createBrand = async (
-  brandData: IBrand,
-): Promise<IBrand> => {
-  if (!brandData.name) {
-    throw new Error("Brand name is required");
-  }
-  const brand = await Brand.create(brandData);
   return brand;
 };

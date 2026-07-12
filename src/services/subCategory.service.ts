@@ -15,7 +15,9 @@ export const getSubCategories = async (
     .filter()
     .search("SubCategory");
 
-  const totalCount = await SubCategory.countDocuments(countFeatures.mongooseQuery.getFilter());
+  const totalCount = await SubCategory.countDocuments(
+    countFeatures.mongooseQuery.getFilter(),
+  );
 
   const apiFeatures = new ApiFeatures(SubCategory.find(filter), queryString)
     .filter()
@@ -57,25 +59,5 @@ export const getSubCategoryById = async (
   id: string,
 ): Promise<ISubCategory | null> => {
   const subCategory = await SubCategory.findById(id);
-  return subCategory;
-};
-
-// @desc: Create subcategory
-// @route: POST /api/v1/subcategories
-// @access: Private
-export const createSubCategory = async (
-  subCategoryData: ISubCategory,
-): Promise<ISubCategory> => {
-  if (!subCategoryData.name) {
-    throw new Error("Subcategory name is required");
-  }
-
-  // check if category exists
-  const category = await Category.findById(subCategoryData.category);
-  if (!category) {
-    throw new Error("Category not found");
-  }
-
-  const subCategory = await SubCategory.create(subCategoryData);
   return subCategory;
 };

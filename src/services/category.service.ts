@@ -10,7 +10,9 @@ export const getCategories = async (
     .filter()
     .search("Category");
 
-  const totalCount = await Category.countDocuments(countFeatures.mongooseQuery.getFilter());
+  const totalCount = await Category.countDocuments(
+    countFeatures.mongooseQuery.getFilter(),
+  );
 
   const apiFeatures = new ApiFeatures(Category.find(), queryString)
     .filter()
@@ -28,15 +30,5 @@ export const getCategoryById = async (
   id: string,
 ): Promise<ICategory | null> => {
   const category = await Category.findById(id);
-  return category;
-};
-
-export const createCategory = async (
-  categoryData: ICategory,
-): Promise<ICategory> => {
-  if (!categoryData.name) {
-    throw new Error("Category name is required");
-  }
-  const category = await Category.create(categoryData);
   return category;
 };
