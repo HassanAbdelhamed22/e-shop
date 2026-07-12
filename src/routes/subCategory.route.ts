@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createFilterObject,
   createSubCategory,
   deleteSubCategory,
   getSubCategories,
@@ -20,7 +21,7 @@ const router = Router({ mergeParams: true });
 
 router
   .route("/")
-  .get(getSubCategories)
+  .get(createFilterObject, getSubCategories)
   .post(setCategoryIdToBody, createSubCategoryValidator, createSubCategory);
 
 router

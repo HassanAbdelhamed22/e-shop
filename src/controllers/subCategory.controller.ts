@@ -12,7 +12,18 @@ export const setCategoryIdToBody = (
   next();
 };
 
-
+export const createFilterObject = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  let filterObject = {};
+  if (req.params.categoryId) {
+    filterObject = { category: req.params.categoryId };
+  }
+  req.filterObject = filterObject;
+  next();
+};
 
 // @desc    Get All Sub Categories
 // @route   GET /api/v1/subcategories
