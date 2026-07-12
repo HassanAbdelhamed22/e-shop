@@ -1,7 +1,6 @@
 import Category from "../models/category.model.ts";
 import SubCategory from "../models/subCategory.model.ts";
 import type { ISubCategory } from "../types/index.ts";
-import slugify from "slugify";
 import { ApiFeatures } from "../utils/apiFeatures.ts";
 import type { PaginationResult } from "../utils/apiFeatures.ts";
 
@@ -77,34 +76,6 @@ export const createSubCategory = async (
     throw new Error("Category not found");
   }
 
-  subCategoryData.slug = slugify(subCategoryData.name, { lower: true });
   const subCategory = await SubCategory.create(subCategoryData);
-  return subCategory;
-};
-
-// @desc: Update subcategory
-// @route: PUT /api/v1/subcategories/:id
-// @access: Private
-export const updateSubCategory = async (
-  id: string,
-  subCategoryData: Partial<ISubCategory>,
-): Promise<ISubCategory | null> => {
-  if (subCategoryData.name) {
-    subCategoryData.slug = slugify(subCategoryData.name, { lower: true });
-  }
-  const subCategory = await SubCategory.findByIdAndUpdate(id, subCategoryData, {
-    returnDocument: "after",
-    runValidators: true,
-  });
-  return subCategory;
-};
-
-// @desc: Delete subcategory
-// @route: DELETE /api/v1/subcategories/:id
-// @access: Private
-export const deleteSubCategory = async (
-  id: string,
-): Promise<ISubCategory | null> => {
-  const subCategory = await SubCategory.findByIdAndDelete(id);
   return subCategory;
 };

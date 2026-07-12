@@ -1,6 +1,5 @@
 import Category from "../models/category.model.ts";
 import type { ICategory } from "../types/index.ts";
-import slugify from "slugify";
 import { ApiFeatures } from "../utils/apiFeatures.ts";
 import type { PaginationResult } from "../utils/apiFeatures.ts";
 
@@ -38,26 +37,6 @@ export const createCategory = async (
   if (!categoryData.name) {
     throw new Error("Category name is required");
   }
-  categoryData.slug = slugify(categoryData.name, { lower: true });
   const category = await Category.create(categoryData);
-  return category;
-};
-
-export const updateCategory = async (
-  id: string,
-  categoryData: Partial<ICategory>,
-): Promise<ICategory | null> => {
-  if (categoryData.name) {
-    categoryData.slug = slugify(categoryData.name, { lower: true });
-  }
-  const category = await Category.findByIdAndUpdate(id, categoryData, {
-    returnDocument: "after",
-    runValidators: true,
-  });
-  return category;
-};
-
-export const deleteCategory = async (id: string): Promise<ICategory | null> => {
-  const category = await Category.findByIdAndDelete(id);
   return category;
 };

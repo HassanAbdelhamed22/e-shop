@@ -1,6 +1,5 @@
 import Brand from "../models/brand.model.ts";
 import type { IBrand } from "../types/index.ts";
-import slugify from "slugify";
 import { ApiFeatures } from "../utils/apiFeatures.ts";
 import type { PaginationResult } from "../utils/apiFeatures.ts";
 
@@ -38,26 +37,6 @@ export const createBrand = async (
   if (!brandData.name) {
     throw new Error("Brand name is required");
   }
-  brandData.slug = slugify(brandData.name, { lower: true });
   const brand = await Brand.create(brandData);
-  return brand;
-};
-
-export const updateBrand = async (
-  id: string,
-  brandData: Partial<IBrand>,
-): Promise<IBrand | null> => {
-  if (brandData.name) {
-    brandData.slug = slugify(brandData.name, { lower: true });
-  }
-  const brand = await Brand.findByIdAndUpdate(id, brandData, {
-    returnDocument: "after",
-    runValidators: true,
-  });
-  return brand;
-};
-
-export const deleteBrand = async (id: string): Promise<IBrand | null> => {
-  const brand = await Brand.findByIdAndDelete(id);
   return brand;
 };
