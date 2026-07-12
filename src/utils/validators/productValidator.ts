@@ -1,5 +1,5 @@
 import { check } from "express-validator";
-import { validate } from "../../middlewares/validator.middleware";
+import { validate } from "../../middlewares/validator.middleware.ts";
 
 export const getProductValidator = [
   check("id").isMongoId().withMessage("Invalid product ID"),
@@ -7,7 +7,7 @@ export const getProductValidator = [
 ];
 
 export const createProductValidator = [
-  check("name")
+  check("title")
     .notEmpty()
     .withMessage("Product name is required")
     .isLength({ min: 3, max: 100 })
@@ -76,7 +76,7 @@ export const createProductValidator = [
 
 export const updateProductValidator = [
   check("id").isMongoId().withMessage("Invalid product ID"),
-  check("name").optional(),
+  check("title").optional(),
   check("description").optional(),
   check("price").optional(),
   check("priceAfterDiscount").optional(),

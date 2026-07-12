@@ -75,7 +75,7 @@ const productSchema = new Schema(
     ratingsAverage: {
       type: Number,
       default: 0,
-      min: [1, "Rating average must be at least 1"],
+      min: [0, "Rating average must be at least 0"],
       max: [5, "Rating average must be at most 5"],
     },
     ratingsQuantity: {
