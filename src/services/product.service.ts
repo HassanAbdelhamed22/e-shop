@@ -6,6 +6,7 @@ export const getProducts = async (
   page: number = 1,
   limit: number = 10,
   filter: Record<string, any> = {},
+  sort: string = "createdAt",
 ): Promise<{ products: IProduct[]; totalCount: number }> => {
   const skip = (page - 1) * limit;
 
@@ -17,6 +18,11 @@ export const getProducts = async (
 
   // pagination
   mongooseQuery = mongooseQuery.skip(skip).limit(limit);
+
+  // Sorting
+  if (sort) {
+    mongooseQuery = mongooseQuery.sort(sort);
+  }
 
   // Execute Query
   const [products, totalCount] = await Promise.all([

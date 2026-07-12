@@ -20,10 +20,18 @@ export const getProducts = async (req: Request, res: Response) => {
   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
   const filter = JSON.parse(queryStr);
 
+  // Sorting
+  const sort = req.query.sort;
+  let sortBy = "createdAt";
+  if (typeof sort === "string") {
+    sortBy = sort.split(",").join(" ");
+  }
+
   const { products, totalCount } = await productService.getProducts(
     page,
     limit,
     filter,
+    sortBy
   );
 
   const totalPages = Math.ceil(totalCount / limit);
