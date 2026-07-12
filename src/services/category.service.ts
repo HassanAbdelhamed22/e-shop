@@ -26,9 +26,4 @@ export const getCategories = async (
   return { categories, pagination: apiFeatures.paginationResult! };
 };
 
-export const getCategoryById = async (
-  id: string,
-): Promise<ICategory | null> => {
-  const category = await Category.findById(id);
-  return category;
-};
+

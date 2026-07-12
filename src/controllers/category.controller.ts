@@ -20,17 +20,7 @@ export const getCategories = async (req: Request, res: Response) => {
 // @desc    Get Category By Id
 // @route   GET /api/v1/categories/:id
 // @access  Public
-export const getCategoryById = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const category = await categoryService.getCategoryById(id);
-  if (!category) {
-    throw new ApiError("Category not found", 404);
-  }
-  res.status(200).json({ success: true, data: { category } });
-};
+export const getCategoryById = controllerFactory.getOne(Category);
 
 export const createCategory = controllerFactory.createOne(Category);
 

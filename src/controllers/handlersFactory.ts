@@ -1,6 +1,27 @@
 import type { Request, Response } from "express";
 import { ApiError } from "../utils/apiError.ts";
 
+export const getOne = (Model: any, populateOpts?: any) => {
+  return async (req: Request, res: Response) => {
+    const { id } = req.params;
+    let query = Model.findById(id);
+    if (populateOpts) {
+      query = query.populate(populateOpts);
+    }
+    const document = await query;
+    if (!document) {
+      throw new ApiError(
+        `Not found ${Model.modelName} with this id ${id}`,
+        404,
+      );
+    }
+    res.status(200).json({
+      success: true,
+      data: document,
+    });
+  };
+};
+
 export const createOne = (Model: any, populateOpts?: any) => {
   return async (req: Request, res: Response) => {
     let document = await Model.create(req.body);

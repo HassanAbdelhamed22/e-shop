@@ -52,12 +52,4 @@ export const getSubCategoriesByCategory = async (
   return subCategories;
 };
 
-// @desc: Get subcategory by ID
-// @route: GET /api/v1/subcategories/:id
-// @access: Public
-export const getSubCategoryById = async (
-  id: string,
-): Promise<ISubCategory | null> => {
-  const subCategory = await SubCategory.findById(id);
-  return subCategory;
-};
+

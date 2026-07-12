@@ -20,17 +20,11 @@ export const getProducts = async (req: Request, res: Response) => {
 // @desc    Get Product By Id
 // @route   GET /api/v1/products/:id
 // @access  Public
-export const getProductById = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const product = await productService.getProductById(id);
-  if (!product) {
-    throw new ApiError("Product not found", 404);
-  }
-  res.status(200).json({ success: true, data: { product } });
-};
+export const getProductById = controllerFactory.getOne(Product, [
+  { path: "category", select: "name" },
+  { path: "subCategories", select: "name" },
+  { path: "brand", select: "name" },
+]);
 
 export const createProduct = controllerFactory.createOne(Product, [
   { path: "category", select: "name" },

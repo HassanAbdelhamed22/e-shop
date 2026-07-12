@@ -25,8 +25,3 @@ export const getBrands = async (
 
   return { brands, pagination: apiFeatures.paginationResult! };
 };
-
-export const getBrandById = async (id: string): Promise<IBrand | null> => {
-  const brand = await Brand.findById(id);
-  return brand;
-};

@@ -56,17 +56,10 @@ export const getSubCategoriesByCategory = async (
 // @desc    Get Sub Category By Id
 // @route   GET /api/v1/subcategories/:id
 // @access  Public
-export const getSubCategoryById = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const subCategory = await subCategoryService.getSubCategoryById(id);
-  if (!subCategory) {
-    throw new ApiError("Subcategory not found", 404);
-  }
-  res.status(200).json({ success: true, data: { subCategory } });
-};
+export const getSubCategoryById = controllerFactory.getOne(SubCategory, {
+  path: "category",
+  select: "name",
+});
 
 export const createSubCategory = controllerFactory.createOne(SubCategory);
 

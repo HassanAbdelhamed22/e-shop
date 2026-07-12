@@ -34,10 +34,4 @@ export const getProducts = async (
   return { products, pagination: apiFeatures.paginationResult! };
 };
 
-export const getProductById = async (id: string): Promise<IProduct | null> => {
-  const product = await Product.findById(id)
-    .populate({ path: "category", select: "name" })
-    .populate({ path: "subCategories", select: "name" })
-    .populate({ path: "brand", select: "name" });
-  return product;
-};
+

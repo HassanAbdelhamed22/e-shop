@@ -20,17 +20,7 @@ export const getBrands = async (req: Request, res: Response) => {
 // @desc    Get Brand By Id
 // @route   GET /api/v1/brands/:id
 // @access  Public
-export const getBrandById = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const brand = await brandService.getBrandById(id);
-  if (!brand) {
-    throw new ApiError("Brand not found", 404);
-  }
-  res.status(200).json({ success: true, data: { brand } });
-};
+export const getBrandById = controllerFactory.getOne(Brand);
 
 export const createBrand = controllerFactory.createOne(Brand);
 
