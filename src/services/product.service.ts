@@ -9,7 +9,12 @@ export const getProducts = async (
   const skip = (page - 1) * limit;
 
   const [products, totalCount] = await Promise.all([
-    Product.find().skip(skip).limit(limit),
+    Product.find()
+      .populate({ path: "category", select: "name" })
+      .populate({ path: "subCategory", select: "name" })
+      .populate({ path: "brand", select: "name" })
+      .skip(skip)
+      .limit(limit),
     Product.countDocuments(),
   ]);
 
@@ -19,7 +24,10 @@ export const getProducts = async (
 export const getProductById = async (
   id: string,
 ): Promise<IProduct | null> => {
-  const product = await Product.findById(id);
+  const product = await Product.findById(id)
+    .populate({ path: "category", select: "name" })
+    .populate({ path: "subCategory", select: "name" })
+    .populate({ path: "brand", select: "name" });
   return product;
 };
 
@@ -30,7 +38,12 @@ export const createProduct = async (
     throw new Error("Product title is required");
   }
   productData.slug = slugify(productData.title, { lower: true });
-  const product = await Product.create(productData);
+  let product = await Product.create(productData);
+  product = await product.populate([
+    { path: "category", select: "name" },
+    { path: "subCategory", select: "name" },
+    { path: "brand", select: "name" },
+  ]);
   return product;
 };
 
@@ -44,7 +57,10 @@ export const updateProduct = async (
   const product = await Product.findByIdAndUpdate(id, productData, {
     returnDocument: "after",
     runValidators: true,
-  });
+  })
+    .populate({ path: "category", select: "name" })
+    .populate({ path: "subCategory", select: "name" })
+    .populate({ path: "brand", select: "name" });
   return product;
 };
 
