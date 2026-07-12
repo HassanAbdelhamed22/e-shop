@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const brandSchema = new mongoose.Schema(
   {
@@ -26,6 +27,12 @@ const brandSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+brandSchema.pre("validate", function (this: any) {
+  if (this.name && (this.isModified("name") || this.isNew)) {
+    this.slug = slugify(this.name, { lower: true });
+  }
+});
 
 const Brand = mongoose.model("Brand", brandSchema);
 

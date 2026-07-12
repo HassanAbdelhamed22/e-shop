@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const subCategorySchema = new mongoose.Schema(
   {
@@ -38,6 +39,12 @@ const subCategorySchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+subCategorySchema.pre("validate", function (this: any) {
+  if (this.name && (this.isModified("name") || this.isNew)) {
+    this.slug = slugify(this.name, { lower: true });
+  }
+});
 
 const SubCategory = mongoose.model("SubCategory", subCategorySchema);
 

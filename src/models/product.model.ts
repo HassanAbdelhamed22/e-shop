@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import slugify from "slugify";
 
 const productSchema = new Schema(
   {
@@ -87,6 +88,12 @@ const productSchema = new Schema(
   },
   { timestamps: true },
 );
+
+productSchema.pre("validate", function (this: any) {
+  if (this.title && (this.isModified("title") || this.isNew)) {
+    this.slug = slugify(this.title, { lower: true });
+  }
+});
 
 const Product = mongoose.model("Product", productSchema);
 
