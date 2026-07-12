@@ -1,54 +1,36 @@
 import Product from "../models/product.model.ts";
 import type { IProduct } from "../types/index.ts";
 import slugify from "slugify";
+import { ApiFeatures } from "../utils/apiFeatures.ts";
+import type { PaginationResult } from "../utils/apiFeatures.ts";
 
 export const getProducts = async (
-  page: number = 1,
-  limit: number = 10,
-  filter: Record<string, any> = {},
-  sort: string = "createdAt",
-  fields: string,
-  search?: string,
-): Promise<{ products: IProduct[]; totalCount: number }> => {
-  const skip = (page - 1) * limit;
+  queryString: any
+): Promise<{ products: IProduct[]; pagination: PaginationResult }> => {
+  // 1) Get the total documents matching the filters & search keyword (before paginating)
+  const countFeatures = new ApiFeatures(Product.find(), queryString)
+    .filter()
+    .search("Product");
 
-  // 1) Unify query filters (combine filter parameters and search keyword)
-  const queryFilter: any = { ...filter };
-  if (search) {
-    queryFilter.$or = [
-      { title: { $regex: search, $options: "i" } },
-      { description: { $regex: search, $options: "i" } },
-    ];
-  }
+  const totalCount = await Product.countDocuments(countFeatures.mongooseQuery.getFilter());
 
-  // Build query
-  let mongooseQuery = Product.find(queryFilter)
+  // 2) Build and execute the full query with pagination, sorting, search, and projection
+  const apiFeatures = new ApiFeatures(Product.find(), queryString)
+    .filter()
+    .search("Product")
+    .sort()
+    .limitFields()
+    .pagination(totalCount);
+
+  // 3) Apply population on the query
+  apiFeatures.mongooseQuery = apiFeatures.mongooseQuery
     .populate({ path: "category", select: "name" })
     .populate({ path: "subCategories", select: "name" })
     .populate({ path: "brand", select: "name" });
 
-  // pagination
-  mongooseQuery = mongooseQuery.skip(skip).limit(limit);
+  const products = await apiFeatures.mongooseQuery;
 
-  // Sorting
-  if (sort) {
-    mongooseQuery = mongooseQuery.sort(sort);
-  }
-
-  // Fields
-  if (fields) {
-    mongooseQuery = mongooseQuery.select(fields);
-  } else {
-    mongooseQuery = mongooseQuery.select("-__v");
-  }
-
-  // Execute Query
-  const [products, totalCount] = await Promise.all([
-    mongooseQuery,
-    Product.countDocuments(queryFilter),
-  ]);
-
-  return { products, totalCount };
+  return { products, pagination: apiFeatures.paginationResult! };
 };
 
 export const getProductById = async (id: string): Promise<IProduct | null> => {

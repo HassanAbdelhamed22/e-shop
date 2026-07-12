@@ -7,57 +7,7 @@ import { ApiError } from "../utils/apiError.ts";
 // @route   GET /api/v1/products
 // @access  Public
 export const getProducts = async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string, 10) || 1;
-  const limit = parseInt(req.query.limit as string, 10) || 10;
-
-  // 1) Filter query parameters
-  const queryObj = { ...req.query };
-  const excludeFields = ["page", "limit", "sort", "fields", "keyword"];
-  excludeFields.forEach((field) => delete queryObj[field]);
-
-  // 2) Map operators (gte, gt, lte, lt) to mongoose query operators ($gte, $gt, $lte, $lt)
-  let queryStr = JSON.stringify(queryObj);
-  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-  const filter = JSON.parse(queryStr);
-
-  // Sorting
-  const sort = req.query.sort;
-  let sortBy = "createdAt";
-  if (typeof sort === "string") {
-    sortBy = sort.split(",").join(" ");
-  }
-
-  // Fields
-  let fields = "";
-  if (typeof req.query.fields === "string") {
-    fields = req.query.fields.split(",").join(" ");
-  }
-
-  // Search
-  let search = "";
-  if (typeof req.query.keyword === "string") {
-    search = req.query.keyword;
-  }
-
-  const { products, totalCount } = await productService.getProducts(
-    page,
-    limit,
-    filter,
-    sortBy,
-    fields,
-    search,
-  );
-
-  const totalPages = Math.ceil(totalCount / limit);
-
-  const pagination = {
-    currentPage: page,
-    limit,
-    totalPages,
-    totalCount,
-    hasNextPage: page < totalPages,
-    hasPrevPage: page > 1,
-  };
+  const { products, pagination } = await productService.getProducts(req.query);
 
   res.status(200).json({
     success: true,
