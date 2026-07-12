@@ -1,5 +1,10 @@
+import mongoose from "mongoose";
 import { check } from "express-validator";
 import { validate } from "../../middlewares/validator.middleware.ts";
+import Category from "../../models/category.model.ts";
+import { ApiError } from "../apiError.ts";
+import SubCategory from "../../models/subCategory.model.ts";
+import Brand from "../../models/brand.model.ts";
 
 export const getProductValidator = [
   check("id").isMongoId().withMessage("Invalid product ID"),
@@ -52,17 +57,54 @@ export const createProductValidator = [
     .notEmpty()
     .withMessage("Product category is required")
     .isMongoId()
-    .withMessage("Product category must be a valid category ID"),
-  check("subCategory")
+    .withMessage("Product category must be a valid category ID")
+    .custom((categoryId) =>
+      Category.findById(categoryId).then((category) => {
+        if (!category) {
+          return Promise.reject(new ApiError("Category not found", 404));
+        }
+        return true;
+      }),
+    ),
+  check("subCategories")
     .optional()
     .isArray()
     .withMessage("Product sub category must be an array of category IDs")
-    .custom((value: string[]) => value.every((id: string) => id))
-    .withMessage("Product sub category must be valid IDs"),
+    .custom((value: string[]) => value.every((id: string) => mongoose.Types.ObjectId.isValid(id)))
+    .withMessage("Product sub category must be valid IDs")
+    .custom(async (subCategoryIds: string[], { req }) => {
+      const uniqueIds = [...new Set(subCategoryIds)];
+      const subCategories = await SubCategory.find({
+        _id: { $in: uniqueIds },
+      });
+
+      if (subCategories.length !== uniqueIds.length) {
+        throw new ApiError("One or more sub categories not found", 404);
+      }
+
+      const productCategory = req.body.category;
+      if (productCategory) {
+        const belongsToCategory = subCategories.every(
+          (subCat) => subCat.category.toString() === productCategory
+        );
+        if (!belongsToCategory) {
+          throw new ApiError("One or more sub categories do not belong to the selected category", 400);
+        }
+      }
+      return true;
+    }),
   check("brand")
     .optional()
     .isMongoId()
-    .withMessage("Product brand must be a valid brand ID"),
+    .withMessage("Product brand must be a valid brand ID")
+    .custom((brandId) =>
+      Brand.findById(brandId).then((brand) => {
+        if (!brand) {
+          return Promise.reject(new ApiError("Brand not found", 404));
+        }
+        return true;
+      }),
+    ),
   check("ratingsAverage")
     .optional()
     .isNumeric()
