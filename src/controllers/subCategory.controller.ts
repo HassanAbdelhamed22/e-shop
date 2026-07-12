@@ -29,22 +29,8 @@ export const createFilterObject = (
 // @route   GET /api/v1/subcategories
 // @access  Public
 export const getSubCategories = async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string, 10) || 1;
-  const limit = parseInt(req.query.limit as string, 10) || 10;
-
-  const { subCategories, totalCount } =
-    await subCategoryService.getSubCategories(page, limit, req.filterObject);
-
-  const totalPages = Math.ceil(totalCount / limit);
-
-  const pagination = {
-    currentPage: page,
-    limit,
-    totalPages,
-    totalCount,
-    hasNextPage: page < totalPages,
-    hasPrevPage: page > 1,
-  };
+  const { subCategories, pagination } =
+    await subCategoryService.getSubCategories(req.query, req.filterObject);
 
   res.status(200).json({
     success: true,

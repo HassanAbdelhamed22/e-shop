@@ -2,23 +2,38 @@ import Category from "../models/category.model.ts";
 import SubCategory from "../models/subCategory.model.ts";
 import type { ISubCategory } from "../types/index.ts";
 import slugify from "slugify";
+import { ApiFeatures } from "../utils/apiFeatures.ts";
+import type { PaginationResult } from "../utils/apiFeatures.ts";
 
 // @desc: Get all subcategories
 // @route: GET /api/v1/subcategories
 // @access: Public
 export const getSubCategories = async (
-  page: number = 1,
-  limit: number = 10,
+  queryString: any,
   filter: Record<string, any> = {},
-): Promise<{ subCategories: ISubCategory[]; totalCount: number }> => {
-  const skip = (page - 1) * limit;
+): Promise<{ subCategories: ISubCategory[]; pagination: PaginationResult }> => {
+  const countFeatures = new ApiFeatures(SubCategory.find(filter), queryString)
+    .filter()
+    .search("SubCategory");
 
-  const [subCategories, totalCount] = await Promise.all([
-    SubCategory.find(filter).skip(skip).limit(limit),
-    SubCategory.countDocuments(filter),
-  ]);
+  const totalCount = await SubCategory.countDocuments(countFeatures.mongooseQuery.getFilter());
 
-  return { subCategories, totalCount };
+  const apiFeatures = new ApiFeatures(SubCategory.find(filter), queryString)
+    .filter()
+    .search("SubCategory")
+    .sort()
+    .limitFields()
+    .pagination(totalCount);
+
+  // Populate category name
+  apiFeatures.mongooseQuery = apiFeatures.mongooseQuery.populate({
+    path: "category",
+    select: "name",
+  });
+
+  const subCategories = await apiFeatures.mongooseQuery;
+
+  return { subCategories, pagination: apiFeatures.paginationResult! };
 };
 
 // @desc: Get subcategory by category ID

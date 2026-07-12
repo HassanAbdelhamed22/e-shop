@@ -1,19 +1,28 @@
 import Category from "../models/category.model.ts";
 import type { ICategory } from "../types/index.ts";
 import slugify from "slugify";
+import { ApiFeatures } from "../utils/apiFeatures.ts";
+import type { PaginationResult } from "../utils/apiFeatures.ts";
 
 export const getCategories = async (
-  page: number = 1,
-  limit: number = 10,
-): Promise<{ categories: ICategory[]; totalCount: number }> => {
-  const skip = (page - 1) * limit;
+  queryString: any,
+): Promise<{ categories: ICategory[]; pagination: PaginationResult }> => {
+  const countFeatures = new ApiFeatures(Category.find(), queryString)
+    .filter()
+    .search("Category");
 
-  const [categories, totalCount] = await Promise.all([
-    Category.find().skip(skip).limit(limit),
-    Category.countDocuments(),
-  ]);
+  const totalCount = await Category.countDocuments(countFeatures.mongooseQuery.getFilter());
 
-  return { categories, totalCount };
+  const apiFeatures = new ApiFeatures(Category.find(), queryString)
+    .filter()
+    .search("Category")
+    .sort()
+    .limitFields()
+    .pagination(totalCount);
+
+  const categories = await apiFeatures.mongooseQuery;
+
+  return { categories, pagination: apiFeatures.paginationResult! };
 };
 
 export const getCategoryById = async (

@@ -7,24 +7,7 @@ import { ApiError } from "../utils/apiError.ts";
 // @route   GET /api/v1/categories
 // @access  Public
 export const getCategories = async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string, 10) || 1;
-  const limit = parseInt(req.query.limit as string, 10) || 10;
-
-  const { categories, totalCount } = await categoryService.getCategories(
-    page,
-    limit,
-  );
-
-  const totalPages = Math.ceil(totalCount / limit);
-
-  const pagination = {
-    currentPage: page,
-    limit,
-    totalPages,
-    totalCount,
-    hasNextPage: page < totalPages,
-    hasPrevPage: page > 1,
-  };
+  const { categories, pagination } = await categoryService.getCategories(req.query);
 
   res.status(200).json({
     success: true,
