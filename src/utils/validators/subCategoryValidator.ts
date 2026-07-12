@@ -1,5 +1,6 @@
 import { check } from "express-validator";
 import { validate } from "../../middlewares/validator.middleware.ts";
+import Category from "../../models/category.model.ts";
 
 export const getSubCategoryValidator = [
   check("id").isMongoId().withMessage("Invalid subcategory ID"),
@@ -16,7 +17,13 @@ export const createSubCategoryValidator = [
     .notEmpty()
     .withMessage("Category ID is required")
     .isMongoId()
-    .withMessage("Invalid category ID"),
+    .withMessage("Invalid category ID")
+    .custom(async (categoryId) => {
+      const category = await Category.findById(categoryId);
+      if (!category) {
+        throw new Error(`Category not found with id ${categoryId}`);
+      }
+    }),
   validate,
 ];
 
@@ -26,6 +33,16 @@ export const updateSubCategoryValidator = [
     .optional()
     .isLength({ min: 2, max: 100 })
     .withMessage("Subcategory name must be between 2 and 100 characters"),
+  check("category")
+    .optional()
+    .isMongoId()
+    .withMessage("Invalid category ID")
+    .custom(async (categoryId) => {
+      const category = await Category.findById(categoryId);
+      if (!category) {
+        throw new Error(`Category not found with id ${categoryId}`);
+      }
+    }),
   validate,
 ];
 
