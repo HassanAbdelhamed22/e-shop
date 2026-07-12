@@ -1,7 +1,18 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import * as subCategoryService from "../services/subCategory.service.ts";
 import type { ISubCategory } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
+
+export const setCategoryIdToBody = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (!req.body.category) req.body.category = req.params.categoryId;
+  next();
+};
+
+
 
 // @desc    Get All Sub Categories
 // @route   GET /api/v1/subcategories
@@ -10,13 +21,8 @@ export const getSubCategories = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string, 10) || 1;
   const limit = parseInt(req.query.limit as string, 10) || 10;
 
-  let filterObject = {};
-  if (req.params.categoryId) {
-    filterObject = { category: req.params.categoryId };
-  }
-
   const { subCategories, totalCount } =
-    await subCategoryService.getSubCategories(page, limit, filterObject);
+    await subCategoryService.getSubCategories(page, limit, req.filterObject);
 
   const totalPages = Math.ceil(totalCount / limit);
 
@@ -67,6 +73,9 @@ export const getSubCategoryById = async (
 // @route   POST /api/v1/subcategories
 // @access  Private
 export const createSubCategory = async (req: Request, res: Response) => {
+  // nested route (create sub category)
+  if (!req.body.category) req.body.category = req.params.categoryId;
+
   const subCategoryData: ISubCategory = req.body;
   const subCategory =
     await subCategoryService.createSubCategory(subCategoryData);

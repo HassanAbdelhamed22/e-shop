@@ -5,6 +5,7 @@ import {
   getSubCategories,
   getSubCategoriesByCategory,
   getSubCategoryById,
+  setCategoryIdToBody,
   updateSubCategory,
 } from "../controllers/subCategory.controller.ts";
 import {
@@ -20,7 +21,7 @@ const router = Router({ mergeParams: true });
 router
   .route("/")
   .get(getSubCategories)
-  .post(createSubCategoryValidator, createSubCategory);
+  .post(setCategoryIdToBody, createSubCategoryValidator, createSubCategory);
 
 router
   .route("/:id")
