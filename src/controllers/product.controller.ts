@@ -27,11 +27,18 @@ export const getProducts = async (req: Request, res: Response) => {
     sortBy = sort.split(",").join(" ");
   }
 
+  // Fields
+  let fields = "";
+  if (typeof req.query.fields === "string") {
+    fields = req.query.fields.split(",").join(" ");
+  }
+
   const { products, totalCount } = await productService.getProducts(
     page,
     limit,
     filter,
-    sortBy
+    sortBy,
+    fields,
   );
 
   const totalPages = Math.ceil(totalCount / limit);
