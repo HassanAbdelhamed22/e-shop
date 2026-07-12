@@ -32,3 +32,25 @@ export interface IBrand {
   description?: string | null;
   image?: string | null;
 }
+
+export interface IProduct {
+  _id?: string | mongoose.Types.ObjectId;
+  title: string;
+  slug?: string;
+  description: string;
+  quantity: number;
+  sold?: number;
+  price: number;
+  priceAfterDiscount?: number;
+  colors?: string[];
+  imageCover: string;
+  images?: string[];
+  category: string | mongoose.Types.ObjectId;
+  subCategory?: (string | mongoose.Types.ObjectId)[];
+  brand?: string | mongoose.Types.ObjectId;
+  ratingsAverage?: number;
+  ratingsQuantity?: number;
+  sizes?: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
