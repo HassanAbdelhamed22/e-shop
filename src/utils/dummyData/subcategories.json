@@ -19,5 +19,33 @@
     "slug": "mens-clothing",
     "description": "Stylish men's apparel and accessories.",
     "category": "66d21b4667d0d8992e610c02"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c14",
+    "name": "Audio & Headphones",
+    "slug": "audio-and-headphones",
+    "description": "True wireless earbuds, noise-canceling headphones, and speakers.",
+    "category": "66d21b4667d0d8992e610c01"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c15",
+    "name": "Women's Clothing",
+    "slug": "womens-clothing",
+    "description": "Elegant women's apparel, dresses, and activewear.",
+    "category": "66d21b4667d0d8992e610c02"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c16",
+    "name": "Kitchen Appliances",
+    "slug": "kitchen-appliances",
+    "description": "Smart kitchen appliances including coffee makers, air fryers, and pressure cookers.",
+    "category": "66d21b4667d0d8992e610c03"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c17",
+    "name": "Fitness Equipment",
+    "slug": "fitness-equipment",
+    "description": "Yoga mats, dumbbells, treadmills, and dynamic workout gear.",
+    "category": "66d21b4667d0d8992e610c04"
   }
 ]

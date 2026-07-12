@@ -12,5 +12,19 @@
     "slug": "fashion",
     "description": "Trendy apparel, shoes, and lifestyle accessories.",
     "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c03",
+    "name": "Home & Kitchen",
+    "slug": "home-and-kitchen",
+    "description": "Premium kitchenware, appliances, and home decor items.",
+    "image": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c04",
+    "name": "Sports & Fitness",
+    "slug": "sports-and-fitness",
+    "description": "Athletic gear, fitness equipment, and sportswear.",
+    "image": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500"
   }
 ]

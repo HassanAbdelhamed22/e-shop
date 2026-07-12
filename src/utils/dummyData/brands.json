@@ -12,5 +12,40 @@
     "slug": "nike",
     "description": "Nike sportswear, sneakers, and equipment.",
     "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c23",
+    "name": "Sony",
+    "slug": "sony",
+    "description": "Sony electronics, gaming, and entertainment.",
+    "image": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c24",
+    "name": "Samsung",
+    "slug": "samsung",
+    "description": "Samsung electronics, mobile devices, and home appliances.",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c25",
+    "name": "Adidas",
+    "slug": "adidas",
+    "description": "Adidas sportswear, footwear, and sports accessories.",
+    "image": "https://images.unsplash.com/photo-1518002171953-a080ee81be25?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c26",
+    "name": "Instant Pot",
+    "slug": "instant-pot",
+    "description": "Smart multi-use pressure cookers and kitchen appliances.",
+    "image": "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c27",
+    "name": "Bowflex",
+    "slug": "bowflex",
+    "description": "Bowflex home fitness and training equipment.",
+    "image": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500"
   }
 ]

@@ -58,5 +58,243 @@
     "ratingsAverage": 4.5,
     "ratingsQuantity": 15,
     "sizes": ["42", "43", "44"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c34",
+    "title": "Samsung Galaxy S24 Ultra",
+    "slug": "samsung-galaxy-s24-ultra",
+    "description": "Welcome to the era of mobile AI. With Galaxy S24 Ultra in your hands, you can unleash whole new levels of creativity, productivity and possibility.",
+    "quantity": 75,
+    "price": 1299.99,
+    "priceAfterDiscount": 1199.99,
+    "colors": ["Titanium Black", "Titanium Gray", "Titanium Yellow"],
+    "imageCover": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c01",
+    "subCategories": ["66d21b4667d0d8992e610c12"],
+    "brand": "66d21b4667d0d8992e610c24",
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 38,
+    "sizes": ["256GB", "512GB"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c35",
+    "title": "Sony WH-1000XM5 Headphones",
+    "slug": "sony-wh-1000xm5-headphones",
+    "description": "Industry leading noise cancellation with two processors controlling 8 microphones, exceptional sound quality, and crystal clear hands-free calling.",
+    "quantity": 60,
+    "price": 399.99,
+    "priceAfterDiscount": 349.99,
+    "colors": ["Black", "Silver"],
+    "imageCover": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c01",
+    "subCategories": ["66d21b4667d0d8992e610c14"],
+    "brand": "66d21b4667d0d8992e610c23",
+    "ratingsAverage": 4.9,
+    "ratingsQuantity": 110
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c36",
+    "title": "Sony PlayStation 5 Slim",
+    "slug": "sony-playstation-5-slim",
+    "description": "Experience lightning-fast loading with an ultra-high speed SSD, deeper immersion with support for haptic feedback, adaptive triggers, and 3D Audio.",
+    "quantity": 40,
+    "price": 499.99,
+    "priceAfterDiscount": 449.99,
+    "colors": ["White"],
+    "imageCover": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c01",
+    "subCategories": ["66d21b4667d0d8992e610c14"],
+    "brand": "66d21b4667d0d8992e610c23",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 89,
+    "sizes": ["1TB Edition"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c37",
+    "title": "Adidas Ultraboost Light Shoes",
+    "slug": "adidas-ultraboost-light-shoes",
+    "description": "Feel epic energy with the new Ultraboost Light, our lightest Ultraboost ever. The magic lies in the Light BOOST midsole, a new generation of Adidas BOOST.",
+    "quantity": 120,
+    "price": 190.00,
+    "priceAfterDiscount": 160.00,
+    "colors": ["Cloud White", "Core Black", "Solar Red"],
+    "imageCover": "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1518002171953-a080ee81be25?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c02",
+    "subCategories": ["66d21b4667d0d8992e610c13"],
+    "brand": "66d21b4667d0d8992e610c25",
+    "ratingsAverage": 4.6,
+    "ratingsQuantity": 54,
+    "sizes": ["41", "42", "43", "44"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c38",
+    "title": "Nike Windrunner Hooded Jacket",
+    "slug": "nike-windrunner-hooded-jacket",
+    "description": "The Nike Sportswear Windrunner Jacket updates our first running windbreaker with lightweight, water-resistant fabric made from recycled materials.",
+    "quantity": 90,
+    "price": 100.00,
+    "priceAfterDiscount": 85.00,
+    "colors": ["Obsidian", "Black", "Grey"],
+    "imageCover": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1544441893-675973e31985?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c02",
+    "subCategories": ["66d21b4667d0d8992e610c13"],
+    "brand": "66d21b4667d0d8992e610c22",
+    "ratingsAverage": 4.4,
+    "ratingsQuantity": 32,
+    "sizes": ["M", "L", "XL"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c39",
+    "title": "Adidas Sporty Chic Summer Dress",
+    "slug": "adidas-sporty-chic-summer-dress",
+    "description": "Embrace warm weather in style. Combining athletic comfort with everyday streetwear elegance, this dress is crafted from soft recycled polyester.",
+    "quantity": 80,
+    "price": 65.00,
+    "priceAfterDiscount": 55.00,
+    "colors": ["Tech Forest", "Wonder White"],
+    "imageCover": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c02",
+    "subCategories": ["66d21b4667d0d8992e610c15"],
+    "brand": "66d21b4667d0d8992e610c25",
+    "ratingsAverage": 4.3,
+    "ratingsQuantity": 19,
+    "sizes": ["S", "M", "L"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c3a",
+    "title": "Instant Pot Duo 7-in-1 Multi-Cooker",
+    "slug": "instant-pot-duo-7-in-1-multi-cooker",
+    "description": "Pressure cooker, slow cooker, rice cooker, yogurt maker, steamer, sauté pan and food warmer. Cooks up to 70% faster than traditional cooking methods.",
+    "quantity": 110,
+    "price": 99.99,
+    "priceAfterDiscount": 79.99,
+    "colors": ["Stainless Steel"],
+    "imageCover": "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1544816155-12df9643f363?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c03",
+    "subCategories": ["66d21b4667d0d8992e610c16"],
+    "brand": "66d21b4667d0d8992e610c26",
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 150,
+    "sizes": ["6-Quart"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c3b",
+    "title": "Instant Pot Vortex Plus Air Fryer",
+    "slug": "instant-pot-vortex-plus-air-fryer",
+    "description": "6-in-1 functionality including Air Fry, Roast, Broil, Bake, Reheat and Dehydrate. EvenCrisp technology delivers all the crunch and tenderness of deep-frying with 95% less oil.",
+    "quantity": 70,
+    "price": 149.99,
+    "priceAfterDiscount": 129.99,
+    "colors": ["Black Stainless"],
+    "imageCover": "https://images.unsplash.com/photo-1621972750749-0fbb1abb7736?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c03",
+    "subCategories": ["66d21b4667d0d8992e610c16"],
+    "brand": "66d21b4667d0d8992e610c26",
+    "ratingsAverage": 4.6,
+    "ratingsQuantity": 64,
+    "sizes": ["6-Quart"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c3c",
+    "title": "Bowflex SelectTech 552 Dumbbells",
+    "slug": "bowflex-selecttech-552-dumbbells",
+    "description": "With just the turn of a dial, you can automatically change your resistance from 5 lbs. all the way up to 52.5 lbs. of weight. No more clutter of 15 different dumbbells.",
+    "quantity": 30,
+    "price": 429.00,
+    "priceAfterDiscount": 399.00,
+    "colors": ["Black/Red"],
+    "imageCover": "https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c04",
+    "subCategories": ["66d21b4667d0d8992e610c17"],
+    "brand": "66d21b4667d0d8992e610c27",
+    "ratingsAverage": 4.9,
+    "ratingsQuantity": 210,
+    "sizes": ["Pair"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c3d",
+    "title": "Apple Watch Ultra 2 GPS + Cellular",
+    "slug": "apple-watch-ultra-2-gps-cellular",
+    "description": "The ultimate sports and adventure watch. Featuring a rugged titanium case, up to 72 hours of battery life in Low Power Mode, and the brightest Apple display ever.",
+    "quantity": 45,
+    "price": 799.00,
+    "priceAfterDiscount": 749.00,
+    "colors": ["Natural Titanium"],
+    "imageCover": "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c01",
+    "subCategories": ["66d21b4667d0d8992e610c12"],
+    "brand": "66d21b4667d0d8992e610c21",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 35,
+    "sizes": ["49mm"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c3e",
+    "title": "Sony X-Series Wireless Speaker",
+    "slug": "sony-x-series-wireless-speaker",
+    "description": "Take powerful sound wherever you go. IP67 waterproof and dustproof design makes it perfect for pool, beach, or park. Connect up to 100 compatible speakers.",
+    "quantity": 110,
+    "price": 129.99,
+    "priceAfterDiscount": 99.99,
+    "colors": ["Black", "Blue", "Orange"],
+    "imageCover": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c01",
+    "subCategories": ["66d21b4667d0d8992e610c14"],
+    "brand": "66d21b4667d0d8992e610c23",
+    "ratingsAverage": 4.5,
+    "ratingsQuantity": 41
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c3f",
+    "title": "Bowflex SelectTech 840 Kettlebell",
+    "slug": "bowflex-selecttech-840-kettlebell",
+    "description": "Replaces 6 kettlebells in a single space-saving design. Adjusts from 8 lbs. up to 40 lbs. to easily increase or decrease workout intensity.",
+    "quantity": 55,
+    "price": 199.00,
+    "priceAfterDiscount": 179.00,
+    "colors": ["Black"],
+    "imageCover": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c04",
+    "subCategories": ["66d21b4667d0d8992e610c17"],
+    "brand": "66d21b4667d0d8992e610c27",
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 78,
+    "sizes": ["Single"]
   }
 ]
