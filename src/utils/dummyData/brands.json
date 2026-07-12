@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "66d21b4667d0d8992e610c21",
+    "name": "Apple",
+    "slug": "apple",
+    "description": "Apple Inc. electronics, software, and online services.",
+    "image": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=500"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c22",
+    "name": "Nike",
+    "slug": "nike",
+    "description": "Nike sportswear, sneakers, and equipment.",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+  }
+]

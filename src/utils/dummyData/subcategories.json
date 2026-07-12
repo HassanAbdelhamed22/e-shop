@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "66d21b4667d0d8992e610c11",
+    "name": "Laptops",
+    "slug": "laptops",
+    "description": "High-performance laptops for gaming and productivity.",
+    "category": "66d21b4667d0d8992e610c01"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c12",
+    "name": "Phones",
+    "slug": "phones",
+    "description": "Latest smartphones and mobile devices.",
+    "category": "66d21b4667d0d8992e610c01"
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c13",
+    "name": "Men's Clothing",
+    "slug": "mens-clothing",
+    "description": "Stylish men's apparel and accessories.",
+    "category": "66d21b4667d0d8992e610c02"
+  }
+]

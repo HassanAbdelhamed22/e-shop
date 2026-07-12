@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon server.ts",
-    "start:prod": "cross-env NODE_ENV=production node server.ts"
+    "start:prod": "cross-env NODE_ENV=production node server.ts",
+    "db:import": "npx tsx src/utils/dummyData/seeder.ts -i",
+    "db:destroy": "npx tsx src/utils/dummyData/seeder.ts -d"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,7 @@
   },
   "homepage": "https://github.com/HassanAbdelhamed22/e-shop#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",

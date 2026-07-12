@@ -1,0 +1,62 @@
+[
+  {
+    "_id": "66d21b4667d0d8992e610c31",
+    "title": "MacBook Pro 16\"",
+    "slug": "macbook-pro-16",
+    "description": "Power through any workflow with the supercharged Apple M3 Pro chip. High performance, exceptional battery life, and a stunning Liquid Retina XDR display.",
+    "quantity": 50,
+    "price": 2499.00,
+    "priceAfterDiscount": 2299.00,
+    "colors": ["Space Gray", "Silver"],
+    "imageCover": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c01",
+    "subCategories": ["66d21b4667d0d8992e610c11"],
+    "brand": "66d21b4667d0d8992e610c21",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 24,
+    "sizes": ["16-inch"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c32",
+    "title": "iPhone 15 Pro",
+    "slug": "iphone-15-pro",
+    "description": "Forged in titanium and featuring the groundbreaking A17 Pro chip, a customizable Action button, and a powerful camera system. The ultimate mobile device.",
+    "quantity": 100,
+    "price": 999.00,
+    "priceAfterDiscount": 899.00,
+    "colors": ["Natural Titanium", "Blue Titanium"],
+    "imageCover": "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c01",
+    "subCategories": ["66d21b4667d0d8992e610c12"],
+    "brand": "66d21b4667d0d8992e610c21",
+    "ratingsAverage": 4.9,
+    "ratingsQuantity": 42,
+    "sizes": ["128GB", "256GB"]
+  },
+  {
+    "_id": "66d21b4667d0d8992e610c33",
+    "title": "Nike Air Max 90",
+    "slug": "nike-air-max-90",
+    "description": "Nothing as fly, nothing as comfortable, nothing as proven. The Nike Air Max 90 stays true to its OG running roots with the iconic Waffle sole and stitched overlays.",
+    "quantity": 200,
+    "price": 130.00,
+    "priceAfterDiscount": 110.00,
+    "colors": ["Infrared", "All Black"],
+    "imageCover": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
+    "images": [
+      "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500"
+    ],
+    "category": "66d21b4667d0d8992e610c02",
+    "subCategories": ["66d21b4667d0d8992e610c13"],
+    "brand": "66d21b4667d0d8992e610c22",
+    "ratingsAverage": 4.5,
+    "ratingsQuantity": 15,
+    "sizes": ["42", "43", "44"]
+  }
+]
