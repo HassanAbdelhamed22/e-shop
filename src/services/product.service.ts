@@ -11,7 +11,7 @@ export const getProducts = async (
   const [products, totalCount] = await Promise.all([
     Product.find()
       .populate({ path: "category", select: "name" })
-      .populate({ path: "subCategory", select: "name" })
+      .populate({ path: "subCategories", select: "name" })
       .populate({ path: "brand", select: "name" })
       .skip(skip)
       .limit(limit),
@@ -26,7 +26,7 @@ export const getProductById = async (
 ): Promise<IProduct | null> => {
   const product = await Product.findById(id)
     .populate({ path: "category", select: "name" })
-    .populate({ path: "subCategory", select: "name" })
+    .populate({ path: "subCategories", select: "name" })
     .populate({ path: "brand", select: "name" });
   return product;
 };
@@ -41,7 +41,7 @@ export const createProduct = async (
   let product = await Product.create(productData);
   product = await product.populate([
     { path: "category", select: "name" },
-    { path: "subCategory", select: "name" },
+    { path: "subCategories", select: "name" },
     { path: "brand", select: "name" },
   ]);
   return product;
@@ -59,7 +59,7 @@ export const updateProduct = async (
     runValidators: true,
   })
     .populate({ path: "category", select: "name" })
-    .populate({ path: "subCategory", select: "name" })
+    .populate({ path: "subCategories", select: "name" })
     .populate({ path: "brand", select: "name" });
   return product;
 };

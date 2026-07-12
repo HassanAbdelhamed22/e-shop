@@ -46,7 +46,7 @@ export interface IProduct {
   imageCover: string;
   images?: string[];
   category: string | mongoose.Types.ObjectId;
-  subCategory?: (string | mongoose.Types.ObjectId)[];
+  subCategories?: (string | mongoose.Types.ObjectId)[];
   brand?: string | mongoose.Types.ObjectId | null;
   ratingsAverage?: number;
   ratingsQuantity?: number;
