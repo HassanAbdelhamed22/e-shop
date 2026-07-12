@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import * as productService from "../services/product.service.ts";
 import type { IProduct } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
+import Product from "../models/product.model.ts";
+import { deleteOne } from "./handlersFactory.ts";
 
 // @desc    Get All Products
 // @route   GET /api/v1/products
@@ -58,16 +60,4 @@ export const updateProduct = async (
 // @desc    Delete Product
 // @route   DELETE /api/v1/products/:id
 // @access  Private
-export const deleteProduct = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const product = await productService.deleteProduct(id);
-  if (!product) {
-    throw new ApiError("Product not found", 404);
-  }
-  res
-    .status(200)
-    .json({ success: true, message: "Product deleted successfully" });
-};
+export const deleteProduct = deleteOne(Product);

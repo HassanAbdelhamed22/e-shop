@@ -2,6 +2,8 @@ import type { Request, Response, NextFunction } from "express";
 import * as subCategoryService from "../services/subCategory.service.ts";
 import type { ISubCategory } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
+import SubCategory from "../models/subCategory.model.ts";
+import { deleteOne } from "./handlersFactory.ts";
 
 export const setCategoryIdToBody = (
   req: Request,
@@ -101,16 +103,4 @@ export const updateSubCategory = async (
 // @desc    Delete Sub Category
 // @route   DELETE /api/v1/subcategories/:id
 // @access  Private
-export const deleteSubCategory = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const subCategory = await subCategoryService.deleteSubCategory(id);
-  if (!subCategory) {
-    throw new ApiError("Subcategory not found", 404);
-  }
-  res
-    .status(200)
-    .json({ success: true, message: "Subcategory deleted successfully" });
-};
+export const deleteSubCategory = deleteOne(SubCategory);

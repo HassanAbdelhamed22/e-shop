@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import * as brandService from "../services/brand.service.ts";
 import type { IBrand } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
+import Brand from "../models/brand.model.ts";
+import { deleteOne } from "./handlersFactory.ts";
 
 // @desc    Get All Brands
 // @route   GET /api/v1/brands
@@ -58,16 +60,4 @@ export const updateBrand = async (
 // @desc    Delete Brand
 // @route   DELETE /api/v1/brands/:id
 // @access  Private
-export const deleteBrand = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const brand = await brandService.deleteBrand(id);
-  if (!brand) {
-    throw new ApiError("Brand not found", 404);
-  }
-  res
-    .status(200)
-    .json({ success: true, message: "Brand deleted successfully" });
-};
+export const deleteBrand = deleteOne(Brand);

@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import * as categoryService from "../services/category.service.ts";
 import type { ICategory } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
+import Category from "../models/category.model.ts";
+import { deleteOne } from "./handlersFactory.ts";
 
 // @desc    Get All Categories
 // @route   GET /api/v1/categories
@@ -58,16 +60,4 @@ export const updateCategory = async (
 // @desc    Delete Category
 // @route   DELETE /api/v1/categories/:id
 // @access  Private
-export const deleteCategory = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const category = await categoryService.deleteCategory(id);
-  if (!category) {
-    throw new ApiError("Category not found", 404);
-  }
-  res
-    .status(200)
-    .json({ success: true, message: "Category deleted successfully" });
-};
+export const deleteCategory = deleteOne(Category);
