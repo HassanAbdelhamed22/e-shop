@@ -1,6 +1,4 @@
 import type { Request, Response, NextFunction } from "express";
-import * as subCategoryService from "../services/subCategory.service.ts";
-import type { ISubCategory } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
 import SubCategory from "../models/subCategory.model.ts";
 import * as controllerFactory from "./handlersFactory.ts";
@@ -27,31 +25,10 @@ export const createFilterObject = (
   next();
 };
 
-// @desc    Get All Sub Categories
-// @route   GET /api/v1/subcategories
-// @access  Public
-export const getSubCategories = async (req: Request, res: Response) => {
-  const { subCategories, pagination } =
-    await subCategoryService.getSubCategories(req.query, req.filterObject);
-
-  res.status(200).json({
-    success: true,
-    data: { subCategories, pagination },
-  });
-};
-
-// @desc: Get subcategory by category ID
-// @route: GET /api/v1/categories/:categoryId/subcategories
-// @access: Public
-export const getSubCategoriesByCategory = async (
-  req: Request<{ categoryId: string }>,
-  res: Response,
-) => {
-  const { categoryId } = req.params;
-  const subCategories =
-    await subCategoryService.getSubCategoriesByCategory(categoryId);
-  res.status(200).json({ success: true, data: { subCategories } });
-};
+export const getSubCategories = controllerFactory.getAll(SubCategory, "SubCategory", {
+  path: "category",
+  select: "name",
+});
 
 // @desc    Get Sub Category By Id
 // @route   GET /api/v1/subcategories/:id

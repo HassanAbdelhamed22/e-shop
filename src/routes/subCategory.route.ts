@@ -4,7 +4,6 @@ import {
   createSubCategory,
   deleteSubCategory,
   getSubCategories,
-  getSubCategoriesByCategory,
   getSubCategoryById,
   setCategoryIdToBody,
   updateSubCategory,
@@ -28,6 +27,6 @@ router
   .route("/:id")
   .get(getSubCategoryValidator, getSubCategoryById)
   .put(updateSubCategoryValidator, updateSubCategory)
-  .delete(deleteSubCategory);
+  .delete(deleteSubCategoryValidator, deleteSubCategory);
 
 export default router;

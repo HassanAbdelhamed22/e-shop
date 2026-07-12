@@ -1,21 +1,10 @@
-import type { Request, Response } from "express";
-import * as categoryService from "../services/category.service.ts";
-import type { ICategory } from "../types/index.ts";
-import { ApiError } from "../utils/apiError.ts";
 import Category from "../models/category.model.ts";
 import * as controllerFactory from "./handlersFactory.ts";
 
 // @desc    Get All Categories
 // @route   GET /api/v1/categories
 // @access  Public
-export const getCategories = async (req: Request, res: Response) => {
-  const { categories, pagination } = await categoryService.getCategories(req.query);
-
-  res.status(200).json({
-    success: true,
-    data: { categories, pagination },
-  });
-};
+export const getCategories = controllerFactory.getAll(Category, "Category");
 
 // @desc    Get Category By Id
 // @route   GET /api/v1/categories/:id

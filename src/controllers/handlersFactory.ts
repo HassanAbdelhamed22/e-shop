@@ -1,5 +1,47 @@
 import type { Request, Response } from "express";
 import { ApiError } from "../utils/apiError.ts";
+import { ApiFeatures } from "../utils/apiFeatures.ts";
+
+export const getAll = (Model: any, modelName?: string, populateOpts?: any) => {
+  return async (req: Request, res: Response) => {
+    let filter = {};
+    if (req.filterObject) {
+      filter = req.filterObject;
+    }
+
+    // 1) Get total count of matching documents
+    const countFeatures = new ApiFeatures(Model.find(filter), req.query)
+      .filter()
+      .search(modelName);
+
+    const totalCount = await Model.countDocuments(
+      countFeatures.mongooseQuery.getFilter(),
+    );
+
+    // 2) Apply all query operations
+    const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
+      .filter()
+      .search(modelName)
+      .sort()
+      .limitFields()
+      .pagination(totalCount);
+
+    // 3) Apply population if requested
+    if (populateOpts) {
+      apiFeatures.mongooseQuery =
+        apiFeatures.mongooseQuery.populate(populateOpts);
+    }
+
+    const documents = await apiFeatures.mongooseQuery;
+
+    res.status(200).json({
+      success: true,
+      results: documents.length,
+      pagination: apiFeatures.paginationResult,
+      data: documents,
+    });
+  };
+};
 
 export const getOne = (Model: any, populateOpts?: any) => {
   return async (req: Request, res: Response) => {
