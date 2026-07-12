@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import categoryRouter from "./routes/category.route.ts";
 import subCategoryRouter from "./routes/subCategory.route.ts";
+import brandRouter from "./routes/brand.route.ts";
 import { globalError } from "./middlewares/error.middleware.ts";
 import { ApiError } from "./utils/apiError.ts";
 
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV === "development") {
 // Routes
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/subcategories", subCategoryRouter);
+app.use("/api/v1/brands", brandRouter);
 
 // Handle invalid routes
 app.all("/*splat", (req, res, next) => {

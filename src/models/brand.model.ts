@@ -1,0 +1,32 @@
+import mongoose from "mongoose";
+
+const brandSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Brand name is required"],
+      unique: [true, "Brand name already exists"],
+      minlength: [3, "Brand name must be at least 3 characters long"],
+      maxlength: [100, "Brand name must be at most 100 characters long"],
+    },
+    slug: {
+      type: String,
+      required: [true, "Brand slug is required"],
+      unique: [true, "Brand slug already exists"],
+      lowercase: true,
+    },
+    description: {
+      type: String,
+      minlength: [10, "Brand description must be at least 10 characters long"],
+      maxlength: [1000, "Brand description must be at most 1000 characters long"],
+    },
+    image: {
+      type: String,
+    },
+  },
+  { timestamps: true },
+);
+
+const Brand = mongoose.model("Brand", brandSchema);
+
+export default Brand;
