@@ -3,7 +3,7 @@ import * as categoryService from "../services/category.service.ts";
 import type { ICategory } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
 import Category from "../models/category.model.ts";
-import { deleteOne } from "./handlersFactory.ts";
+import * as controllerFactory from "./handlersFactory.ts";
 
 // @desc    Get All Categories
 // @route   GET /api/v1/categories
@@ -44,20 +44,9 @@ export const createCategory = async (req: Request, res: Response) => {
 // @desc    Update Category
 // @route   PUT /api/v1/categories/:id
 // @access  Private
-export const updateCategory = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const categoryData: Partial<ICategory> = req.body;
-  const category = await categoryService.updateCategory(id, categoryData);
-  if (!category) {
-    throw new ApiError("Category not found", 404);
-  }
-  res.status(200).json({ success: true, data: { category } });
-};
+export const updateCategory = controllerFactory.updateOne(Category);
 
 // @desc    Delete Category
 // @route   DELETE /api/v1/categories/:id
 // @access  Private
-export const deleteCategory = deleteOne(Category);
+export const deleteCategory = controllerFactory.deleteOne(Category);

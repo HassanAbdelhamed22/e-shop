@@ -3,7 +3,7 @@ import * as productService from "../services/product.service.ts";
 import type { IProduct } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
 import Product from "../models/product.model.ts";
-import { deleteOne } from "./handlersFactory.ts";
+import * as controllerFactory from "./handlersFactory.ts";
 
 // @desc    Get All Products
 // @route   GET /api/v1/products
@@ -44,20 +44,9 @@ export const createProduct = async (req: Request, res: Response) => {
 // @desc    Update Product
 // @route   PUT /api/v1/products/:id
 // @access  Private
-export const updateProduct = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const productData: Partial<IProduct> = req.body;
-  const product = await productService.updateProduct(id, productData);
-  if (!product) {
-    throw new ApiError("Product not found", 404);
-  }
-  res.status(200).json({ success: true, data: { product } });
-};
+export const updateProduct = controllerFactory.updateOne(Product)
 
 // @desc    Delete Product
 // @route   DELETE /api/v1/products/:id
 // @access  Private
-export const deleteProduct = deleteOne(Product);
+export const deleteProduct = controllerFactory.deleteOne(Product);

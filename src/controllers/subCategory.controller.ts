@@ -3,7 +3,7 @@ import * as subCategoryService from "../services/subCategory.service.ts";
 import type { ISubCategory } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
 import SubCategory from "../models/subCategory.model.ts";
-import { deleteOne } from "./handlersFactory.ts";
+import * as controllerFactory from "./handlersFactory.ts";
 
 export const setCategoryIdToBody = (
   req: Request,
@@ -84,23 +84,9 @@ export const createSubCategory = async (req: Request, res: Response) => {
 // @desc    Update Sub Category
 // @route   PUT /api/v1/subcategories/:id
 // @access  Private
-export const updateSubCategory = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const subCategoryData: Partial<ISubCategory> = req.body;
-  const subCategory = await subCategoryService.updateSubCategory(
-    id,
-    subCategoryData,
-  );
-  if (!subCategory) {
-    throw new ApiError("Subcategory not found", 404);
-  }
-  res.status(200).json({ success: true, data: { subCategory } });
-};
+export const updateSubCategory = controllerFactory.updateOne(SubCategory);
 
 // @desc    Delete Sub Category
 // @route   DELETE /api/v1/subcategories/:id
 // @access  Private
-export const deleteSubCategory = deleteOne(SubCategory);
+export const deleteSubCategory = controllerFactory.deleteOne(SubCategory);
