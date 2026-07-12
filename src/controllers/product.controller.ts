@@ -33,12 +33,19 @@ export const getProducts = async (req: Request, res: Response) => {
     fields = req.query.fields.split(",").join(" ");
   }
 
+  // Search
+  let search = "";
+  if (typeof req.query.keyword === "string") {
+    search = req.query.keyword;
+  }
+
   const { products, totalCount } = await productService.getProducts(
     page,
     limit,
     filter,
     sortBy,
     fields,
+    search,
   );
 
   const totalPages = Math.ceil(totalCount / limit);

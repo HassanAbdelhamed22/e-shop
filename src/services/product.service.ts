@@ -8,11 +8,21 @@ export const getProducts = async (
   filter: Record<string, any> = {},
   sort: string = "createdAt",
   fields: string,
+  search?: string,
 ): Promise<{ products: IProduct[]; totalCount: number }> => {
   const skip = (page - 1) * limit;
 
+  // 1) Unify query filters (combine filter parameters and search keyword)
+  const queryFilter: any = { ...filter };
+  if (search) {
+    queryFilter.$or = [
+      { title: { $regex: search, $options: "i" } },
+      { description: { $regex: search, $options: "i" } },
+    ];
+  }
+
   // Build query
-  let mongooseQuery = Product.find(filter)
+  let mongooseQuery = Product.find(queryFilter)
     .populate({ path: "category", select: "name" })
     .populate({ path: "subCategories", select: "name" })
     .populate({ path: "brand", select: "name" });
@@ -35,7 +45,7 @@ export const getProducts = async (
   // Execute Query
   const [products, totalCount] = await Promise.all([
     mongooseQuery,
-    Product.countDocuments(filter),
+    Product.countDocuments(queryFilter),
   ]);
 
   return { products, totalCount };
