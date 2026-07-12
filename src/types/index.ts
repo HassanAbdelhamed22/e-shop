@@ -41,13 +41,13 @@ export interface IProduct {
   quantity: number;
   sold?: number;
   price: number;
-  priceAfterDiscount?: number;
+  priceAfterDiscount?: number | null;
   colors?: string[];
   imageCover: string;
   images?: string[];
   category: string | mongoose.Types.ObjectId;
   subCategory?: (string | mongoose.Types.ObjectId)[];
-  brand?: string | mongoose.Types.ObjectId;
+  brand?: string | mongoose.Types.ObjectId | null;
   ratingsAverage?: number;
   ratingsQuantity?: number;
   sizes?: string[];
