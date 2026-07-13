@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const userSchema = new mongoose.Schema(
   {
@@ -37,6 +38,29 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+userSchema.pre("validate", function (this: any) {
+  if (this.name && (this.isModified("name") || this.isNew)) {
+    this.slug = slugify(this.name, { lower: true });
+  }
+});
+
+// Return image base url + image name in response
+const setImageUrl = (doc: any) => {
+  if (doc.profileImage && !doc.profileImage.startsWith("http")) {
+    doc.profileImage = `${process.env.BASE_URL}/users/${doc.profileImage}`;
+  }
+};
+
+// after find
+userSchema.post("init", function (doc: any) {
+  setImageUrl(doc);
+});
+
+// after save and update
+userSchema.post("save", function (doc: any) {
+  setImageUrl(doc);
+});
 
 const User = mongoose.model("User", userSchema);
 
