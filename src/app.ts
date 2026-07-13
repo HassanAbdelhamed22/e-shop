@@ -1,3 +1,5 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import morgan from "morgan";
 import categoryRouter from "./routes/category.route.ts";
@@ -7,12 +9,17 @@ import productRouter from "./routes/product.route.ts";
 import { globalError } from "./middlewares/error.middleware.ts";
 import { ApiError } from "./utils/apiError.ts";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 app.set("query parser", "extended");
 
 // Middlewares
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "..", "uploads")));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

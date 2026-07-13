@@ -25,7 +25,15 @@ export const createCategoryValidator = [
 
 export const updateCategoryValidator = [
   check("id").isMongoId().withMessage("Invalid category ID"),
-  check("name").optional(),
+  check("name")
+    .optional()
+    .custom(async (val: string) => {
+      const category = await Category.findOne({ name: val });
+      if (category) {
+        throw new Error("Category name already exists");
+      }
+      return true;
+    }),
   validate,
 ];
 

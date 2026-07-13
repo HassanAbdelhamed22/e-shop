@@ -27,7 +27,7 @@ router
 router
   .route("/:id")
   .get(getCategoryValidator, getCategoryById)
-  .put(updateCategoryValidator, updateCategory)
+  .put(uploadCategoryImg, updateCategoryValidator, resizeImg, updateCategory)
   .delete(deleteCategoryValidator, deleteCategory);
 
 router.use("/:categoryId/subcategories", subCategoryRouter);
