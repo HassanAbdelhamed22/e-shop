@@ -1,20 +1,25 @@
-import type { Request } from "express";
+import type { NextFunction, Request, Response } from "express";
 import Category from "../models/category.model.ts";
 import { ApiError } from "../utils/apiError.ts";
 import * as controllerFactory from "./handlersFactory.ts";
 import multer from "multer";
+import sharp from "sharp";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/categories");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = file.mimetype.split("/")[1];
-    const filename = `category-${uniqueSuffix}.${ext}`;
-    cb(null, filename);
-  },
-});
+// 1- Disk Storage
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/categories");
+//   },
+//   filename: (req, file, cb) => {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     const ext = file.mimetype.split("/")[1];
+//     const filename = `category-${uniqueSuffix}.${ext}`;
+//     cb(null, filename);
+//   },
+// });
+
+// 2- Memory Storage
+const storage = multer.memoryStorage();
 
 const fileFilter = function (
   req: Request,
@@ -30,6 +35,27 @@ const fileFilter = function (
 
 const upload = multer({ storage, fileFilter });
 export const uploadCategoryImg = upload.single("image");
+
+export const resizeImg = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (req.file) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const filename = `category-${uniqueSuffix}.jpeg`;
+
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat("jpeg")
+      .jpeg({ quality: 90 })
+      .toFile(`uploads/categories/${filename}`);
+
+    req.body.image = filename;
+  }
+
+  next();
+};
 
 // @desc    Get All Categories
 // @route   GET /api/v1/categories

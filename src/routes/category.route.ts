@@ -7,6 +7,7 @@ import {
   updateCategory,
   deleteCategory,
   uploadCategoryImg,
+  resizeImg,
 } from "../controllers/category.controller.ts";
 import {
   createCategoryValidator,
@@ -21,7 +22,7 @@ const router = Router();
 router
   .route("/")
   .get(getCategories)
-  .post(uploadCategoryImg, createCategoryValidator, createCategory);
+  .post(uploadCategoryImg, createCategoryValidator, resizeImg, createCategory);
 
 router
   .route("/:id")
