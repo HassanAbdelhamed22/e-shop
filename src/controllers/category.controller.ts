@@ -1,4 +1,6 @@
+import type { Request } from "express";
 import Category from "../models/category.model.ts";
+import { ApiError } from "../utils/apiError.ts";
 import * as controllerFactory from "./handlersFactory.ts";
 import multer from "multer";
 
@@ -14,7 +16,19 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const fileFilter = function (
+  req: Request,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new ApiError("Invalid file type, only images are allowed", 400));
+  }
+};
+
+const upload = multer({ storage, fileFilter });
 export const uploadCategoryImg = upload.single("image");
 
 // @desc    Get All Categories
