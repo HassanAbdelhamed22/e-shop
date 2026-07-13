@@ -95,6 +95,30 @@ productSchema.pre("validate", function (this: any) {
   }
 });
 
+const setImageUrl = (doc: any) => {
+  if (doc.imageCover && !doc.imageCover.startsWith("http")) {
+    doc.imageCover = `${process.env.BASE_URL}/products/${doc.imageCover}`;
+  }
+  if (doc.images && Array.isArray(doc.images)) {
+    doc.images = doc.images.map((image: string) => {
+      if (!image.startsWith("http")) {
+        return `${process.env.BASE_URL}/products/${image}`;
+      }
+      return image;
+    });
+  }
+};
+
+// after find
+productSchema.post("init", function (doc: any) {
+  setImageUrl(doc);
+});
+
+// after save
+productSchema.post("save", function (doc: any) {
+  setImageUrl(doc);
+});
+
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;

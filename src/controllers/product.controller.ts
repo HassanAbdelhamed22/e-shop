@@ -1,5 +1,14 @@
 import Product from "../models/product.model.ts";
 import * as controllerFactory from "./handlersFactory.ts";
+import { uploadMixOfImages, resizeProductImages } from "../middlewares/uploadImage.middleware.ts";
+
+export const uploadProductImages = uploadMixOfImages([
+  { name: "imageCover", maxCount: 1 },
+  { name: "images", maxCount: 5 },
+]);
+
+export { resizeProductImages };
+
 
 // @desc    Get All Products
 // @route   GET /api/v1/products

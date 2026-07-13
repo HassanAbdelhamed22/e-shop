@@ -5,6 +5,8 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
+  uploadProductImages,
+  resizeProductImages,
 } from "../controllers/product.controller.ts";
 import {
   createProductValidator,
@@ -15,12 +17,15 @@ import {
 
 const router = Router();
 
-router.route("/").get(getProducts).post(createProductValidator, createProduct);
+router
+  .route("/")
+  .get(getProducts)
+  .post(uploadProductImages, resizeProductImages, createProductValidator, createProduct);
 
 router
   .route("/:id")
   .get(getProductValidator, getProductById)
-  .put(updateProductValidator, updateProduct)
+  .put(uploadProductImages, resizeProductImages, updateProductValidator, updateProduct)
   .delete(deleteProductValidator, deleteProduct);
 
 export default router;
