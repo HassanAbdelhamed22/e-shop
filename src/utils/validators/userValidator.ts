@@ -30,7 +30,16 @@ export const createUserValidator = [
     .notEmpty()
     .withMessage("Password is required")
     .isLength({ min: 6, max: 100 })
-    .withMessage("Password must be between 6 and 100 characters"),
+    .withMessage("Password must be between 6 and 100 characters")
+    .custom((password: string, { req }) => {
+      if (password !== req.body.passwordConfirm) {
+        throw new ApiError("Password confirmation does not match", 400);
+      }
+      return true;
+    }),
+  check("passwordConfirm")
+    .notEmpty()
+    .withMessage("Password confirmation is required"),
   check("phone")
     .optional()
     .isMobilePhone("ar-EG")
