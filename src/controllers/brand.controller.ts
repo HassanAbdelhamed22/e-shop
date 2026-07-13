@@ -1,5 +1,19 @@
+import {
+  resizeImage,
+  uploadSingleImage,
+} from "../middlewares/uploadImage.middleware.ts";
 import Brand from "../models/brand.model.ts";
 import * as controllerFactory from "./handlersFactory.ts";
+
+export const uploadBrandImg = uploadSingleImage("image");
+
+export const resizeBrandImg = resizeImage({
+  width: 600,
+  height: 600,
+  folder: "brands",
+  prefix: "brand",
+  bodyFieldName: "image",
+});
 
 // @desc    Get All Brands
 // @route   GET /api/v1/brands

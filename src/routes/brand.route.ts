@@ -5,6 +5,8 @@ import {
   getBrandById,
   updateBrand,
   deleteBrand,
+  uploadBrandImg,
+  resizeBrandImg,
 } from "../controllers/brand.controller.ts";
 import {
   createBrandValidator,
@@ -18,12 +20,12 @@ const router = Router();
 router
   .route("/")
   .get(getBrands)
-  .post(createBrandValidator, createBrand);
+  .post(uploadBrandImg, createBrandValidator, resizeBrandImg, createBrand);
 
 router
   .route("/:id")
   .get(getBrandValidator, getBrandById)
-  .put(updateBrandValidator, updateBrand)
+  .put(uploadBrandImg, updateBrandValidator, resizeBrandImg, updateBrand)
   .delete(deleteBrandValidator, deleteBrand);
 
 export default router;
