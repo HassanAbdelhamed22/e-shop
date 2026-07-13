@@ -54,3 +54,12 @@ export interface IProduct {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface UpdateUserData {
+  name?: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+  active?: boolean;
+  profileImage?: string;
+}

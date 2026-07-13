@@ -7,8 +7,10 @@ import {
   deleteUser,
   uploadUserImg,
   resizeUserImg,
+  changeUserPassword,
 } from "../controllers/user.controller.ts";
 import {
+  changeUserPasswordValidator,
   createUserValidator,
   deleteUserValidator,
   getUserValidator,
@@ -27,5 +29,9 @@ router
   .get(getUserValidator, getUserById)
   .put(uploadUserImg, resizeUserImg, updateUserValidator, updateUser)
   .delete(deleteUserValidator, deleteUser);
+
+router
+  .route("/:id/change-password")
+  .put(changeUserPasswordValidator, changeUserPassword);
 
 export default router;
