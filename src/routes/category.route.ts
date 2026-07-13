@@ -1,10 +1,12 @@
 import { Router } from "express";
+import type { NextFunction, Request, Response } from "express";
 import {
   createCategory,
   getCategories,
   getCategoryById,
   updateCategory,
   deleteCategory,
+  uploadCategoryImg,
 } from "../controllers/category.controller.ts";
 import {
   createCategoryValidator,
@@ -19,7 +21,7 @@ const router = Router();
 router
   .route("/")
   .get(getCategories)
-  .post(createCategoryValidator, createCategory);
+  .post(uploadCategoryImg, createCategoryValidator, createCategory);
 
 router
   .route("/:id")

@@ -1,5 +1,21 @@
 import Category from "../models/category.model.ts";
 import * as controllerFactory from "./handlersFactory.ts";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/categories");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = file.mimetype.split("/")[1];
+    const filename = `category-${uniqueSuffix}.${ext}`;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage });
+export const uploadCategoryImg = upload.single("image");
 
 // @desc    Get All Categories
 // @route   GET /api/v1/categories
