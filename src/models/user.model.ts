@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema<IUser>(
     phone: String,
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "manager", "admin"],
       default: "user",
     },
     active: {

@@ -4,6 +4,7 @@ declare global {
   namespace Express {
     interface Request {
       filterObject?: any;
+      user?: IUser;
     }
   }
 }
@@ -73,7 +74,7 @@ export interface IUser {
   passwordChangedAt?: Date;
   profileImage?: string | null;
   phone?: string | null;
-  role?: "user" | "admin";
+  role?: "user" | "manager" | "admin";
   active?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
