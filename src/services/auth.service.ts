@@ -149,3 +149,53 @@ export const verifyPasswordResetCode = async ({ code }: { code: string }) => {
   user.passwordResetCodeVerify = true;
   await user.save();
 };
+
+/**
+ * @desc    Reset password business logic
+ */
+export const resetPassword = async ({
+  email,
+  newPassword,
+}: {
+  email: string;
+  newPassword: string;
+}) => {
+  // 1) Get user based on email
+  const user = await User.findOne({
+    email,
+    passwordResetCodeVerify: true,
+  }).select("+password");
+
+  if (!user) {
+    throw new ApiError("No user for this email", 404);
+  }
+
+  // 2) Check if password reset code is verified
+  if (!user.passwordResetCodeVerify) {
+    throw new ApiError("Please verify your password reset code first", 400);
+  }
+
+  // 3) Check if new password is the same as current password
+  const isPasswordCorrect = await bcrypt.compare(newPassword, user.password!);
+  if (isPasswordCorrect) {
+    throw new ApiError(
+      "New password must be different from current password",
+      400,
+    );
+  }
+
+  // 4) Reset password
+  user.password = newPassword;
+
+  user.passwordChangedAt = new Date(Date.now());
+  user.passwordResetCode = undefined;
+  user.passwordResetCodeExpires = undefined;
+  user.passwordResetCodeVerify = undefined;
+
+  await user.save();
+
+  // 5) Generate a new token
+  const token = generateToken({ userId: user._id });
+
+  return token;
+};

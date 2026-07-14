@@ -90,3 +90,20 @@ export const verifyPasswordResetCode = async (
     message: "Password reset code verified successfully",
   });
 };
+
+/**
+ * @desc    Reset password
+ * @route   POST /api/v1/auth/reset-password
+ * @access  Public
+ */
+export const resetPassword = async (req: Request, res: Response) => {
+  const { email, newPassword } = req.body;
+
+  const token = await authService.resetPassword({ email, newPassword });
+
+  res.status(200).json({
+    status: "success",
+    message: "Password reset successfully",
+    token,
+  });
+};
