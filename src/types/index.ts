@@ -72,6 +72,9 @@ export interface IUser {
   email: string;
   password?: string;
   passwordChangedAt?: Date;
+  passwordResetCode?: string;
+  passwordResetCodeExpires?: Date;
+  passwordResetCodeVerify?: boolean;
   profileImage?: string | null;
   phone?: string | null;
   role?: "user" | "manager" | "admin";
