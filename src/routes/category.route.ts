@@ -16,18 +16,31 @@ import {
   updateCategoryValidator,
 } from "../utils/validators/categoryValidator.ts";
 import subCategoryRouter from "./subCategory.route.ts";
+import { protect } from "../middlewares/protect.middleware.ts";
 
 const router = Router();
 
 router
   .route("/")
   .get(getCategories)
-  .post(uploadCategoryImg, createCategoryValidator, resizeImg, createCategory);
+  .post(
+    protect,
+    uploadCategoryImg,
+    createCategoryValidator,
+    resizeImg,
+    createCategory,
+  );
 
 router
   .route("/:id")
   .get(getCategoryValidator, getCategoryById)
-  .put(uploadCategoryImg, updateCategoryValidator, resizeImg, updateCategory)
+  .put(
+    protect,
+    uploadCategoryImg,
+    updateCategoryValidator,
+    resizeImg,
+    updateCategory,
+  )
   .delete(deleteCategoryValidator, deleteCategory);
 
 router.use("/:categoryId/subcategories", subCategoryRouter);
