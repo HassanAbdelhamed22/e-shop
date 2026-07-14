@@ -70,10 +70,12 @@ export interface IUser {
   slug?: string | null;
   email: string;
   password?: string;
+  passwordChangedAt?: Date;
   profileImage?: string | null;
   phone?: string | null;
   role?: "user" | "admin";
   active?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  isPasswordChangedAfter?: (JWTTimestamp: number) => boolean;
 }

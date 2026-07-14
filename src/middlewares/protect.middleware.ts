@@ -41,14 +41,8 @@ export const protect = async (
   }
 
   // 4. check if user changed password after token was issued
-  if (user.passwordChangedAt) {
-    const changedTimestamp = parseInt(
-      (user.passwordChangedAt.getTime() / 1000) as unknown as string,
-      10,
-    );
-    if (decoded.iat < changedTimestamp) {
-      throw new ApiError("You changed your password, please login again", 401);
-    }
+  if (user.isPasswordChangedAfter && user.isPasswordChangedAfter(decoded.iat)) {
+    throw new ApiError("You changed your password, please login again", 401);
   }
 
   next();

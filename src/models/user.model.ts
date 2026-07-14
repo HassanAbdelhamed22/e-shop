@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import slugify from "slugify";
+import type { IUser } from "../types/index.ts";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<IUser>(
   {
     name: {
       type: String,
@@ -38,7 +39,21 @@ const userSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete (ret as any).password;
+        return ret;
+      },
+    },
+    toObject: {
+      transform: (doc, ret) => {
+        delete (ret as any).password;
+        return ret;
+      },
+    },
+  },
 );
 
 userSchema.pre("save", async function (this: any) {
@@ -70,6 +85,20 @@ userSchema.post("save", function (doc: any) {
   setImageUrl(doc);
 });
 
-const User = mongoose.model("User", userSchema);
+userSchema.methods.isPasswordChangedAfter = function (
+  this: any,
+  JWTTimestamp: number
+): boolean {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      (this.passwordChangedAt.getTime() / 1000).toString(),
+      10
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
+};
+
+const User = mongoose.model<IUser>("User", userSchema);
 
 export default User;

@@ -84,7 +84,7 @@ export const changeUserPassword = async (
   // 2) Verify current password
   const isPasswordCorrect = await bcrypt.compare(
     req.body.currentPassword,
-    user.password,
+    user.password!,
   );
 
   if (!isPasswordCorrect) {
