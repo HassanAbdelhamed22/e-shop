@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import * as authService from "../services/auth.service.ts";
+import type { IUser } from "../types/index.ts";
 
 /**
  * @desc    signup user
@@ -9,7 +10,7 @@ import * as authService from "../services/auth.service.ts";
 export const signup = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const { name, email, password, phone } = req.body;
 
@@ -23,6 +24,28 @@ export const signup = async (
   res.status(201).json({
     status: "success",
     message: "User created successfully",
+    token,
+    data: user,
+  });
+};
+
+/**
+ * @desc    Login user and generate a JWT token
+ * @route   POST /api/v1/auth/login
+ * @access  Public
+ */
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { email, password } = req.body;
+
+  const { user, token } = await authService.login({ email, password } as IUser);
+
+  res.status(200).json({
+    status: "success",
+    message: "User logged in successfully",
     token,
     data: user,
   });
