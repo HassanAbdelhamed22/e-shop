@@ -50,3 +50,23 @@ export const login = async (
     data: user,
   });
 };
+
+/**
+ * @desc    Forgot password
+ * @route   POST /api/v1/auth/forgot-password
+ * @access  Public
+ */
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { email } = req.body;
+
+  await authService.forgotPassword({ email });
+
+  res.status(200).json({
+    status: "success",
+    message: "Password reset code sent successfully",
+  });
+};

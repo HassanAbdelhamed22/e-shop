@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import User from "../models/user.model.ts";
 import jwt from "jsonwebtoken";
 import type { IUser } from "../types/index.ts";
@@ -59,7 +60,7 @@ export const login = async (
 export const changeUserPasswordService = async (
   userId: string,
   currentPassword?: string,
-  newPassword?: string
+  newPassword?: string,
 ) => {
   // 1) Fetch user and explicitly select password
   const user = await User.findById(userId).select("+password");
@@ -70,7 +71,7 @@ export const changeUserPasswordService = async (
   // 2) Verify current password
   const isPasswordCorrect = await bcrypt.compare(
     currentPassword!,
-    user.password!
+    user.password!,
   );
   if (!isPasswordCorrect) {
     throw new ApiError("Incorrect password", 401);
@@ -82,4 +83,32 @@ export const changeUserPasswordService = async (
   await user.save();
 
   return user;
+};
+
+/**
+ * @desc    Forgot password business logic
+ */
+export const forgotPassword = async ({ email }: { email: string }) => {
+  // 1) Find user by email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError("No user for this email", 404);
+  }
+
+  // 2) If user exist, generate random 6-digit code and save it in db
+  const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const hashedCode = crypto
+    .createHash("sha256")
+    .update(randomCode)
+    .digest("hex");
+
+  user.passwordResetCode = hashedCode;
+  user.passwordResetCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+  user.passwordResetCodeVerify = false;
+
+  await user.save();
+
+  // 3) Send the code via email
+  //
 };
