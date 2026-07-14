@@ -70,3 +70,23 @@ export const forgotPassword = async (
     message: "Password reset code sent successfully",
   });
 };
+
+/**
+ * @desc    Verify password reset code
+ * @route   POST /api/v1/auth/verify-password-reset-code
+ * @access  Public
+ */
+export const verifyPasswordResetCode = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { code } = req.body;
+
+  await authService.verifyPasswordResetCode({ code });
+
+  res.status(200).json({
+    status: "success",
+    message: "Password reset code verified successfully",
+  });
+};

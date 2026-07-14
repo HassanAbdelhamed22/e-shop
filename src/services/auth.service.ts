@@ -129,3 +129,23 @@ export const forgotPassword = async ({ email }: { email: string }) => {
     throw new ApiError("Failed to send email", 500);
   }
 };
+
+/**
+ * @desc    Verify password reset code business logic
+ */
+export const verifyPasswordResetCode = async ({ code }: { code: string }) => {
+  // 1) Get user based on reset code
+  const hashedCode = crypto.createHash("sha256").update(code).digest("hex");
+  const user = await User.findOne({
+    passwordResetCode: hashedCode,
+    passwordResetCodeExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw new ApiError("Invalid or expired reset code", 400);
+  }
+
+  // 2) Reset code valid
+  user.passwordResetCodeVerify = true;
+  await user.save();
+};
