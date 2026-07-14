@@ -48,3 +48,17 @@ export const signupValidator = [
     }),
   validate,
 ];
+
+export const loginValidator = [
+  check("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email address"),
+  check("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ min: 6, max: 100 })
+    .withMessage("Password must be between 6 and 100 characters"),
+  validate,
+];
