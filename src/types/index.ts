@@ -63,3 +63,17 @@ export interface UpdateUserData {
   active?: boolean;
   profileImage?: string;
 }
+
+export interface IUser {
+  _id?: string | mongoose.Types.ObjectId;
+  name: string;
+  slug?: string | null;
+  email: string;
+  password?: string;
+  profileImage?: string | null;
+  phone?: string | null;
+  role?: "user" | "admin";
+  active?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
