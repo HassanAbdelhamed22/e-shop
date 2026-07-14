@@ -7,12 +7,13 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
   if (!errors.isEmpty()) {
     return next(
       new ApiError(
-        errors
-          .array()
-          .map((err) => err.msg)
-          .join(", "),
+        "Validation Error",
         400,
-      ),
+        errors.array().map((err) => ({
+          field: err.type === "field" ? err.path : err.type,
+          message: err.msg,
+        }))
+      )
     );
   }
   next();
