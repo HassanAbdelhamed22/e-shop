@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/apiError.ts";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.ts";
+import type { IUser } from "../types/index.ts";
 
 export const protect = async (
   req: Request,
@@ -44,6 +45,9 @@ export const protect = async (
   if (user.isPasswordChangedAfter && user.isPasswordChangedAfter(decoded.iat)) {
     throw new ApiError("You changed your password, please login again", 401);
   }
+
+  // 5. save user to request object
+  req.user = user as IUser;
 
   next();
 };
