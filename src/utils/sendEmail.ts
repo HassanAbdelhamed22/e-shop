@@ -18,6 +18,7 @@ export async function sendEmail(options: any) {
     to: options.to,
     subject: options.subject,
     text: options.text,
+    html: options.html,
   };
 
   await transporter.sendMail(mailOptions);
