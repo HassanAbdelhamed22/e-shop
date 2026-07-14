@@ -7,6 +7,7 @@ import subCategoryRouter from "./routes/subCategory.route.ts";
 import brandRouter from "./routes/brand.route.ts";
 import productRouter from "./routes/product.route.ts";
 import userRouter from "./routes/user.route.ts";
+import authRouter from "./routes/auth.route.ts";
 import { globalError } from "./middlewares/error.middleware.ts";
 import { ApiError } from "./utils/apiError.ts";
 
@@ -32,6 +33,7 @@ app.use("/api/v1/subcategories", subCategoryRouter);
 app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/auth", authRouter);
 
 // Handle invalid routes
 app.all("/*splat", (req, res, next) => {
