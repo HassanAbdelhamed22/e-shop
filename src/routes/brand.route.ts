@@ -14,18 +14,34 @@ import {
   getBrandValidator,
   updateBrandValidator,
 } from "../utils/validators/brandValidator.ts";
+import { protect } from "../middlewares/protect.middleware.ts";
+import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
 
 const router = Router();
 
 router
   .route("/")
   .get(getBrands)
-  .post(uploadBrandImg, createBrandValidator, resizeBrandImg, createBrand);
+  .post(
+    protect,
+    allowedTo("manager", "admin"),
+    uploadBrandImg,
+    createBrandValidator,
+    resizeBrandImg,
+    createBrand,
+  );
 
 router
   .route("/:id")
   .get(getBrandValidator, getBrandById)
-  .put(uploadBrandImg, updateBrandValidator, resizeBrandImg, updateBrand)
-  .delete(deleteBrandValidator, deleteBrand);
+  .put(
+    protect,
+    allowedTo("manager", "admin"),
+    uploadBrandImg,
+    updateBrandValidator,
+    resizeBrandImg,
+    updateBrand,
+  )
+  .delete(protect, allowedTo("admin"), deleteBrandValidator, deleteBrand);
 
 export default router;

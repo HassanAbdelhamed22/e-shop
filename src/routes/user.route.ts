@@ -16,22 +16,38 @@ import {
   getUserValidator,
   updateUserValidator,
 } from "../utils/validators/userValidator.ts";
+import { protect } from "../middlewares/protect.middleware.ts";
+import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
 
 const router = Router();
 
 router
   .route("/")
-  .get(getUsers)
-  .post(uploadUserImg, resizeUserImg, createUserValidator, createUser);
+  .get(protect, allowedTo("admin"), getUsers)
+  .post(
+    protect,
+    allowedTo("admin"),
+    uploadUserImg,
+    resizeUserImg,
+    createUserValidator,
+    createUser,
+  );
 
 router
   .route("/:id")
-  .get(getUserValidator, getUserById)
-  .put(uploadUserImg, resizeUserImg, updateUserValidator, updateUser)
-  .delete(deleteUserValidator, deleteUser);
+  .get(protect, allowedTo("admin"), getUserValidator, getUserById)
+  .put(
+    protect,
+    allowedTo("admin"),
+    uploadUserImg,
+    resizeUserImg,
+    updateUserValidator,
+    updateUser,
+  )
+  .delete(protect, allowedTo("admin"), deleteUserValidator, deleteUser);
 
 router
   .route("/:id/change-password")
-  .put(changeUserPasswordValidator, changeUserPassword);
+  .put(protect, changeUserPasswordValidator, changeUserPassword);
 
 export default router;

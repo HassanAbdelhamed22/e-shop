@@ -17,6 +17,7 @@ import {
 } from "../utils/validators/categoryValidator.ts";
 import subCategoryRouter from "./subCategory.route.ts";
 import { protect } from "../middlewares/protect.middleware.ts";
+import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
 
 const router = Router();
 
@@ -25,6 +26,7 @@ router
   .get(getCategories)
   .post(
     protect,
+    allowedTo("manager", "admin"),
     uploadCategoryImg,
     createCategoryValidator,
     resizeImg,
@@ -36,12 +38,13 @@ router
   .get(getCategoryValidator, getCategoryById)
   .put(
     protect,
+    allowedTo("manager", "admin"),
     uploadCategoryImg,
     updateCategoryValidator,
     resizeImg,
     updateCategory,
   )
-  .delete(deleteCategoryValidator, deleteCategory);
+  .delete(protect, allowedTo("admin"), deleteCategoryValidator, deleteCategory);
 
 router.use("/:categoryId/subcategories", subCategoryRouter);
 
