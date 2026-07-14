@@ -7,7 +7,7 @@ import {
 import type { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/apiError.ts";
 import type { UpdateUserData } from "../types/index.ts";
-import bcrypt from "bcryptjs";
+import * as authService from "../services/auth.service.ts";
 
 export const uploadUserImg = uploadSingleImage("profileImage");
 
@@ -75,27 +75,12 @@ export const changeUserPassword = async (
   res: Response,
   next: NextFunction,
 ) => {
-  // 1) Explicitly select '+password' because select: false is set in the schema
-  const user = await User.findById(req.params.id).select("+password");
-  if (!user) {
-    return next(new ApiError(`No user for this id ${req.params.id}`, 404));
-  }
-
-  // 2) Verify current password
-  const isPasswordCorrect = await bcrypt.compare(
-    req.body.currentPassword,
-    user.password!,
+  const { currentPassword, password } = req.body;
+  const user = await authService.changeUserPasswordService(
+    req.params.id as string,
+    currentPassword,
+    password,
   );
-
-  if (!isPasswordCorrect) {
-    return next(new ApiError("Incorrect password", 401));
-  }
-
-  // 3) Set raw password and passwordChangedAt
-  user.password = req.body.password;
-  user.passwordChangedAt = new Date(Date.now());
-
-  await user.save();
 
   res.status(200).json({
     success: true,

@@ -52,3 +52,34 @@ export const login = async (
 
   return { user, token };
 };
+
+/**
+ * @desc    Change user password business logic
+ */
+export const changeUserPasswordService = async (
+  userId: string,
+  currentPassword?: string,
+  newPassword?: string
+) => {
+  // 1) Fetch user and explicitly select password
+  const user = await User.findById(userId).select("+password");
+  if (!user) {
+    throw new ApiError(`No user for this id ${userId}`, 404);
+  }
+
+  // 2) Verify current password
+  const isPasswordCorrect = await bcrypt.compare(
+    currentPassword!,
+    user.password!
+  );
+  if (!isPasswordCorrect) {
+    throw new ApiError("Incorrect password", 401);
+  }
+
+  // 3) Set raw password and passwordChangedAt
+  user.password = newPassword!;
+  user.passwordChangedAt = new Date(Date.now());
+  await user.save();
+
+  return user;
+};
