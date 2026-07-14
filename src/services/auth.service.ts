@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import type { IUser } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
 import bcrypt from "bcryptjs";
+import { sendEmail } from "../utils/sendEmail.ts";
+import { getForgotPasswordTemplate } from "../utils/emailTemplate.ts";
 
 const generateToken = (payload: any) => {
   return jwt.sign(payload, process.env.JWT_SECRET!, {
@@ -109,6 +111,21 @@ export const forgotPassword = async ({ email }: { email: string }) => {
 
   await user.save();
 
-  // 3) Send the code via email
-  //
+  const message = `Hi ${user.name},\n\nTo reset your password, please use the following code: ${randomCode}\n\nThis code will expire in 10 minutes.\n\nBest regards,\nE-Shop App`;
+  const htmlMessage = getForgotPasswordTemplate(user.name, randomCode);
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: "Reset Your Password",
+      text: message,
+      html: htmlMessage,
+    });
+  } catch (error) {
+    user.passwordResetCode = undefined;
+    user.passwordResetCodeExpires = undefined;
+    user.passwordResetCodeVerify = undefined;
+    await user.save();
+
+    throw new ApiError("Failed to send email", 500);
+  }
 };
