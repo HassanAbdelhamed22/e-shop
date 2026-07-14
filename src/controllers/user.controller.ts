@@ -91,8 +91,10 @@ export const changeUserPassword = async (
     return next(new ApiError("Incorrect password", 401));
   }
 
-  // 3) Set raw password 
+  // 3) Set raw password and passwordChangedAt
   user.password = req.body.password;
+  user.passwordChangedAt = new Date(Date.now());
+
   await user.save();
 
   res.status(200).json({
