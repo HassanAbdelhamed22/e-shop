@@ -1,5 +1,5 @@
 import mongoose, { Model, Schema } from "mongoose";
-import { IUser } from "../types";
+import type { IUser } from "../types/index.ts";
 
 interface Review {
   user: mongoose.Types.ObjectId | IUser;
