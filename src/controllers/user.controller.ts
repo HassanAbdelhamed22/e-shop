@@ -165,3 +165,19 @@ export const updateMyProfile = async (
     data: user,
   });
 };
+
+// @desc    Deactivate logged in user account
+// @route   DELETE /api/v1/users/me
+// @access  Private
+export const deactivateAccount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  await authService.deactivateAccountService(req.user?._id as string);
+
+  res.status(200).json({
+    success: true,
+    message: "Your account has been deactivated successfully",
+  });
+};

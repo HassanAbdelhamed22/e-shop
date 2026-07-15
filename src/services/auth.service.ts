@@ -51,7 +51,6 @@ export const login = async (
   return { user, token };
 };
 
-
 /**
  * @desc    Forgot password business logic
  */
@@ -245,4 +244,21 @@ export const updateMyProfileService = async (
   }
 
   return user;
+};
+
+/**
+ * @desc    Deactivate logged in user account business logic
+ */
+
+export const deactivateAccountService = async (userId: string) => {
+  await User.findByIdAndUpdate(
+    userId,
+    {
+      active: false,
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
 };

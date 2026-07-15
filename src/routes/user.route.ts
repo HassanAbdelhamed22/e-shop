@@ -11,6 +11,7 @@ import {
   getMe,
   updateMyPassword,
   updateMyProfile,
+  deactivateAccount,
 } from "../controllers/user.controller.ts";
 import {
   changeUserPasswordValidator,
@@ -37,6 +38,7 @@ router.put(
   updateMyProfileValidator,
   updateMyProfile,
 );
+router.delete("/me", deactivateAccount);
 
 // Admin routes
 router.use(allowedTo("admin"));
