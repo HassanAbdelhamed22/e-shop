@@ -8,6 +8,8 @@ import {
   uploadUserImg,
   resizeUserImg,
   changeUserPassword,
+  getMe,
+  updateMyPassword,
 } from "../controllers/user.controller.ts";
 import {
   changeUserPasswordValidator,
@@ -15,39 +17,33 @@ import {
   deleteUserValidator,
   getUserValidator,
   updateUserValidator,
+  updateMyPasswordValidator,
 } from "../utils/validators/userValidator.ts";
 import { protect } from "../middlewares/protect.middleware.ts";
 import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
 
 const router = Router();
 
+// User routes
+router.get("/me", protect, getMe);
+router.put("/me/change-password", protect, updateMyPasswordValidator, updateMyPassword);
+
+// Admin routes
+router.use(protect, allowedTo("admin"));
+
 router
   .route("/")
-  .get(protect, allowedTo("admin"), getUsers)
-  .post(
-    protect,
-    allowedTo("admin"),
-    uploadUserImg,
-    resizeUserImg,
-    createUserValidator,
-    createUser,
-  );
+  .get(getUsers)
+  .post(uploadUserImg, resizeUserImg, createUserValidator, createUser);
 
 router
   .route("/:id")
-  .get(protect, allowedTo("admin"), getUserValidator, getUserById)
-  .put(
-    protect,
-    allowedTo("admin"),
-    uploadUserImg,
-    resizeUserImg,
-    updateUserValidator,
-    updateUser,
-  )
-  .delete(protect, allowedTo("admin"), deleteUserValidator, deleteUser);
+  .get(getUserValidator, getUserById)
+  .put(uploadUserImg, resizeUserImg, updateUserValidator, updateUser)
+  .delete(deleteUserValidator, deleteUser);
 
 router
   .route("/:id/change-password")
-  .put(protect, changeUserPasswordValidator, changeUserPassword);
+  .put(changeUserPasswordValidator, changeUserPassword);
 
 export default router;

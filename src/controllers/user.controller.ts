@@ -8,6 +8,7 @@ import type { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/apiError.ts";
 import type { UpdateUserData } from "../types/index.ts";
 import * as authService from "../services/auth.service.ts";
+import { generateToken } from "../utils/createToken.ts";
 
 export const uploadUserImg = uploadSingleImage("profileImage");
 
@@ -75,13 +76,11 @@ export const changeUserPassword = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { currentPassword, password } = req.body;
-  const user = await authService.changeUserPasswordService(
+  const { password } = req.body;
+  const user = await authService.changeUserPasswordByAdminService(
     req.params.id as string,
-    currentPassword,
     password,
   );
-
   res.status(200).json({
     success: true,
     data: user,
@@ -92,3 +91,47 @@ export const changeUserPassword = async (
 // @route   DELETE /api/v1/users/:id
 // @access  Private
 export const deleteUser = controllerFactory.deleteOne(User);
+
+// @desc    Get Logged In User
+// @route   GET /api/v1/users/me
+// @access  Private
+export const getMe = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const user = await User.findById(req.user?._id);
+
+  if (!user) {
+    return next(new ApiError(`No user for this id ${req.user?._id}`, 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+};
+
+// @desc    Update Logged In User Password
+// @route   PUT /api/v1/users/me/change-password
+// @access  Private
+export const updateMyPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { currentPassword, password } = req.body;
+  const user = await authService.changeMyPasswordService(
+    req.user?._id as string,
+    currentPassword,
+    password,
+  );
+
+  const token = generateToken({ userId: user._id });
+
+  res.status(200).json({
+    success: true,
+    token,
+    data: user,
+  });
+};
