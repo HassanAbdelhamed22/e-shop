@@ -46,6 +46,13 @@ export const login = async (
     throw new ApiError("Invalid email or password", 404);
   }
 
+  if (!user.active) {
+    throw new ApiError(
+      "Your account has been deactivated, please contact the admin",
+      401,
+    );
+  }
+
   const token = generateToken({ userId: user._id });
 
   return { user, token };
