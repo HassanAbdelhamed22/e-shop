@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import User from "../models/user.model.ts";
-import type { IUser } from "../types/index.ts";
+import type { IUser, UpdateUserData } from "../types/index.ts";
+import fs from "fs";
 import { ApiError } from "../utils/apiError.ts";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "../utils/sendEmail.ts";
@@ -164,7 +165,9 @@ export const resetPassword = async ({
   return token;
 };
 
-// User self-service password update
+/**
+ * @desc    Change my password business logic
+ */
 export const changeMyPasswordService = async (
   userId: string,
   currentPassword?: string,
@@ -190,7 +193,9 @@ export const changeMyPasswordService = async (
   return user;
 };
 
-// Admin password override
+/**
+ * @desc    Change user password by admin business logic
+ */
 export const changeUserPasswordByAdminService = async (
   userId: string,
   newPassword?: string,
@@ -203,6 +208,41 @@ export const changeUserPasswordByAdminService = async (
   user.password = newPassword!;
   user.passwordChangedAt = new Date();
   await user.save();
+
+  return user;
+};
+
+/**
+ * @desc    Update logged in user profile business logic (without password)
+ */
+export const updateMyProfileService = async (
+  userId: string,
+  updateData: UpdateUserData,
+) => {
+  // Delete old profile image if a new one is uploaded
+  if (updateData.profileImage) {
+    const user = await User.findById(userId);
+    if (user && user.profileImage) {
+      const oldImageFilename = user.profileImage.split("/").pop();
+      const oldImagePath = `uploads/users/${oldImageFilename}`;
+      if (fs.existsSync(oldImagePath)) {
+        try {
+          fs.unlinkSync(oldImagePath);
+        } catch (err) {
+          // Log or silently ignore error if old image deletion fails
+        }
+      }
+    }
+  }
+
+  const user = await User.findByIdAndUpdate(userId, updateData, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) {
+    throw new ApiError(`No user for this id ${userId}`, 404);
+  }
 
   return user;
 };

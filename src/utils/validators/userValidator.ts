@@ -63,9 +63,9 @@ export const updateUserValidator = [
     .optional()
     .isEmail()
     .withMessage("Invalid email address")
-    .custom(async (val: string) => {
+    .custom(async (val: string, { req }) => {
       const user = await User.findOne({ email: val });
-      if (user) {
+      if (user && user._id.toString() !== req.params?.id) {
         throw new ApiError("Email already exists", 400);
       }
       return true;
@@ -74,9 +74,9 @@ export const updateUserValidator = [
     .optional()
     .isMobilePhone("ar-EG")
     .withMessage("Invalid phone number only Egyptian numbers supported")
-    .custom(async (val: string) => {
+    .custom(async (val: string, { req }) => {
       const user = await User.findOne({ phone: val });
-      if (user) {
+      if (user && user._id.toString() !== req.params?.id) {
         throw new ApiError("Phone number already exists", 400);
       }
       return true;
@@ -128,5 +128,33 @@ export const updateMyPasswordValidator = [
 
 export const deleteUserValidator = [
   check("id").isMongoId().withMessage("Invalid User ID"),
+  validate,
+];
+
+export const updateMyProfileValidator = [
+  check("name").optional(),
+  check("email")
+    .optional()
+    .isEmail()
+    .withMessage("Invalid email address")
+    .custom(async (val: string, { req }) => {
+      const user = await User.findOne({ email: val });
+      if (user && user._id.toString() !== req.user?._id.toString()) {
+        throw new ApiError("Email already exists", 400);
+      }
+      return true;
+    }),
+  check("phone")
+    .optional()
+    .isMobilePhone("ar-EG")
+    .withMessage("Invalid phone number only Egyptian numbers supported")
+    .custom(async (val: string, { req }) => {
+      const user = await User.findOne({ phone: val });
+      if (user && user._id.toString() !== req.user?._id.toString()) {
+        throw new ApiError("Phone number already exists", 400);
+      }
+      return true;
+    }),
+  check("profileImage").optional(),
   validate,
 ];
