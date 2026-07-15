@@ -135,3 +135,33 @@ export const updateMyPassword = async (
     data: user,
   });
 };
+
+// @desc    Update logged in user profile
+// @route   PUT /api/v1/users/me
+// @access  Private
+export const updateMyProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const updateData: UpdateUserData = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+
+  if (req.body.profileImage) {
+    updateData.profileImage = req.body.profileImage;
+  }
+
+  const user = await authService.updateMyProfileService(
+    req.user?._id as string,
+    updateData as UpdateUserData,
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    data: user,
+  });
+};

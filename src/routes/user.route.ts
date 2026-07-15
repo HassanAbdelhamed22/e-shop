@@ -10,6 +10,7 @@ import {
   changeUserPassword,
   getMe,
   updateMyPassword,
+  updateMyProfile,
 } from "../controllers/user.controller.ts";
 import {
   changeUserPasswordValidator,
@@ -18,18 +19,27 @@ import {
   getUserValidator,
   updateUserValidator,
   updateMyPasswordValidator,
+  updateMyProfileValidator,
 } from "../utils/validators/userValidator.ts";
 import { protect } from "../middlewares/protect.middleware.ts";
 import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
 
 const router = Router();
 
-// User routes
-router.get("/me", protect, getMe);
-router.put("/me/change-password", protect, updateMyPasswordValidator, updateMyPassword);
+router.use(protect);
+
+router.get("/me", getMe);
+router.put("/me/change-password", updateMyPasswordValidator, updateMyPassword);
+router.put(
+  "/me",
+  uploadUserImg,
+  resizeUserImg,
+  updateMyProfileValidator,
+  updateMyProfile,
+);
 
 // Admin routes
-router.use(protect, allowedTo("admin"));
+router.use(allowedTo("admin"));
 
 router
   .route("/")
