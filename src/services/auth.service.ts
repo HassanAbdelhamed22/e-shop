@@ -1,17 +1,11 @@
 import crypto from "crypto";
 import User from "../models/user.model.ts";
-import jwt from "jsonwebtoken";
 import type { IUser } from "../types/index.ts";
 import { ApiError } from "../utils/apiError.ts";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "../utils/sendEmail.ts";
 import { getForgotPasswordTemplate } from "../utils/emailTemplate.ts";
-
-const generateToken = (payload: any) => {
-  return jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: process.env.JWT_EXPIRES_IN as any,
-  });
-};
+import { generateToken } from "../utils/createToken.ts";
 
 /**
  * @desc    Create a new user and generate a JWT token
@@ -56,36 +50,6 @@ export const login = async (
   return { user, token };
 };
 
-/**
- * @desc    Change user password business logic
- */
-export const changeUserPasswordService = async (
-  userId: string,
-  currentPassword?: string,
-  newPassword?: string,
-) => {
-  // 1) Fetch user and explicitly select password
-  const user = await User.findById(userId).select("+password");
-  if (!user) {
-    throw new ApiError(`No user for this id ${userId}`, 404);
-  }
-
-  // 2) Verify current password
-  const isPasswordCorrect = await bcrypt.compare(
-    currentPassword!,
-    user.password!,
-  );
-  if (!isPasswordCorrect) {
-    throw new ApiError("Incorrect password", 401);
-  }
-
-  // 3) Set raw password and passwordChangedAt
-  user.password = newPassword!;
-  user.passwordChangedAt = new Date(Date.now());
-  await user.save();
-
-  return user;
-};
 
 /**
  * @desc    Forgot password business logic
@@ -198,4 +162,47 @@ export const resetPassword = async ({
   const token = generateToken({ userId: user._id });
 
   return token;
+};
+
+// User self-service password update
+export const changeMyPasswordService = async (
+  userId: string,
+  currentPassword?: string,
+  newPassword?: string,
+) => {
+  const user = await User.findById(userId).select("+password");
+  if (!user) {
+    throw new ApiError(`No user for this id ${userId}`, 404);
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(
+    currentPassword!,
+    user.password!,
+  );
+  if (!isPasswordCorrect) {
+    throw new ApiError("Incorrect password", 401);
+  }
+
+  user.password = newPassword!;
+  user.passwordChangedAt = new Date();
+  await user.save();
+
+  return user;
+};
+
+// Admin password override
+export const changeUserPasswordByAdminService = async (
+  userId: string,
+  newPassword?: string,
+) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(`No user for this id ${userId}`, 404);
+  }
+
+  user.password = newPassword!;
+  user.passwordChangedAt = new Date();
+  await user.save();
+
+  return user;
 };
