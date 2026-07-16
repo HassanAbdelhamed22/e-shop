@@ -59,7 +59,7 @@ export const updateReviewValidator = [
       if (!review) {
         throw new ApiError("Review not found", 404);
       }
-      if (review.user.toString() !== req.user._id.toString()) {
+      if (review.user?._id?.toString() !== req.user._id.toString()) {
         throw new ApiError("You are not authorized to update this review", 403);
       }
       return true;
