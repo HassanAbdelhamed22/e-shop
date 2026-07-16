@@ -86,7 +86,11 @@ const productSchema = new Schema(
 
     sizes: [String],
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
 productSchema.pre("validate", function (this: any) {
@@ -117,6 +121,13 @@ productSchema.post("init", function (doc: any) {
 // after save
 productSchema.post("save", function (doc: any) {
   setImageUrl(doc);
+});
+
+// virtual populate reviews
+productSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "product",
 });
 
 const Product = mongoose.model("Product", productSchema);

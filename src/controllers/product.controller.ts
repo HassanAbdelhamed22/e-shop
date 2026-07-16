@@ -1,6 +1,9 @@
 import Product from "../models/product.model.ts";
 import * as controllerFactory from "./handlersFactory.ts";
-import { uploadMixOfImages, resizeProductImages } from "../middlewares/uploadImage.middleware.ts";
+import {
+  uploadMixOfImages,
+  resizeProductImages,
+} from "../middlewares/uploadImage.middleware.ts";
 
 export const uploadProductImages = uploadMixOfImages([
   { name: "imageCover", maxCount: 1 },
@@ -8,7 +11,6 @@ export const uploadProductImages = uploadMixOfImages([
 ]);
 
 export { resizeProductImages };
-
 
 // @desc    Get All Products
 // @route   GET /api/v1/products
@@ -26,6 +28,7 @@ export const getProductById = controllerFactory.getOne(Product, [
   { path: "category", select: "name" },
   { path: "subCategories", select: "name" },
   { path: "brand", select: "name" },
+  { path: "reviews" },
 ]);
 
 export const createProduct = controllerFactory.createOne(Product, [
