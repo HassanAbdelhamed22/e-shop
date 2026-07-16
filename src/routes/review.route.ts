@@ -9,18 +9,29 @@ import {
 
 import { protect } from "../middlewares/protect.middleware.ts";
 import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
+import {
+  createReviewValidator,
+  deleteReviewValidator,
+  getReviewValidator,
+  updateReviewValidator,
+} from "../utils/validators/reviewValidator.ts";
 
 const router = Router();
 
 router
   .route("/")
   .get(getReviews)
-  .post(protect, allowedTo("user"), createReview);
+  .post(protect, allowedTo("user"), createReviewValidator, createReview);
 
 router
   .route("/:id")
-  .get(getReviewById)
-  .put(protect, allowedTo("user"), updateReview)
-  .delete(protect, allowedTo("user", "admin", "manager"), deleteReview);
+  .get(getReviewValidator, getReviewById)
+  .put(protect, allowedTo("user"), updateReviewValidator, updateReview)
+  .delete(
+    protect,
+    allowedTo("user", "admin", "manager"),
+    deleteReviewValidator,
+    deleteReview,
+  );
 
 export default router;
