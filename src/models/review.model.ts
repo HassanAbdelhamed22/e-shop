@@ -39,6 +39,11 @@ const reviewSchema = new Schema<Review>(
   { timestamps: true },
 );
 
+// populate user in response
+reviewSchema.pre(/find/i, function (this: any) {
+  this.populate("user", "name email profileImage");
+});
+
 const Review: Model<Review> = mongoose.model<Review>("Review", reviewSchema);
 
 export default Review;
