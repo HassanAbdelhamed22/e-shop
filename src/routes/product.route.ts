@@ -16,8 +16,15 @@ import {
 } from "../utils/validators/productValidator.ts";
 import { protect } from "../middlewares/protect.middleware.ts";
 import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
+import reviewRouter from "./review.route.ts";
 
 const router = Router();
+
+// Nested route for reviews
+// POST /api/v1/products/:productId/reviews
+// GET /api/v1/products/:productId/reviews
+// GET /api/v1/products/:productId/reviews/:reviewId
+router.use("/:productId/reviews", reviewRouter);
 
 router
   .route("/")

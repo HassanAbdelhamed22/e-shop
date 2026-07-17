@@ -5,6 +5,8 @@ import {
   createReview,
   updateReview,
   deleteReview,
+  createFilterObject,
+  setProductIdAndUserIdToBody,
 } from "../controllers/review.controller.ts";
 
 import { protect } from "../middlewares/protect.middleware.ts";
@@ -16,12 +18,18 @@ import {
   updateReviewValidator,
 } from "../utils/validators/reviewValidator.ts";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
 router
   .route("/")
-  .get(getReviews)
-  .post(protect, allowedTo("user"), createReviewValidator, createReview);
+  .get(createFilterObject, getReviews)
+  .post(
+    protect,
+    allowedTo("user"),
+    setProductIdAndUserIdToBody,
+    createReviewValidator,
+    createReview,
+  );
 
 router
   .route("/:id")
