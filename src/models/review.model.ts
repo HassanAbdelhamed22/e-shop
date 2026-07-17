@@ -88,6 +88,14 @@ reviewSchema.post("save", async function () {
   );
 });
 
+reviewSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await (doc.constructor as ReviewModel).calculateAverageRatingsAndQuantity(
+      doc.product as any,
+    );
+  }
+});
+
 const Review = mongoose.model<Review, ReviewModel>("Review", reviewSchema);
 
 export default Review;
