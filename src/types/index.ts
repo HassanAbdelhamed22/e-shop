@@ -79,6 +79,7 @@ export interface IUser {
   phone?: string | null;
   role?: "user" | "manager" | "admin";
   active?: boolean;
+  wishlist?: (mongoose.Types.ObjectId | IProduct)[];
   createdAt?: Date;
   updatedAt?: Date;
   isPasswordChangedAfter?: (JWTTimestamp: number) => boolean;

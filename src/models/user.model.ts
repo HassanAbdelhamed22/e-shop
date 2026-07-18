@@ -41,6 +41,12 @@ const userSchema = new mongoose.Schema<IUser>(
       type: Boolean,
       default: true,
     },
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -90,12 +96,12 @@ userSchema.post("save", function (doc: any) {
 
 userSchema.methods.isPasswordChangedAfter = function (
   this: any,
-  JWTTimestamp: number
+  JWTTimestamp: number,
 ): boolean {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
       (this.passwordChangedAt.getTime() / 1000).toString(),
-      10
+      10,
     );
     return JWTTimestamp < changedTimestamp;
   }
