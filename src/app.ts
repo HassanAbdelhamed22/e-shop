@@ -10,6 +10,7 @@ import productRouter from "./routes/product.route.ts";
 import userRouter from "./routes/user.route.ts";
 import reviewRouter from "./routes/review.route.ts";
 import wishlistRouter from "./routes/wishlist.route.ts";
+import addressRouter from "./routes/address.route.ts";
 import { globalError } from "./middlewares/error.middleware.ts";
 import { ApiError } from "./utils/apiError.ts";
 
@@ -38,6 +39,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
+app.use("/api/v1/addresses", addressRouter);
 
 // Handle invalid routes
 app.all("/*splat", (req, res, next) => {

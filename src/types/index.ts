@@ -80,7 +80,17 @@ export interface IUser {
   role?: "user" | "manager" | "admin";
   active?: boolean;
   wishlist?: (mongoose.Types.ObjectId | IProduct)[];
+  addresses?: IAddress[];
   createdAt?: Date;
   updatedAt?: Date;
   isPasswordChangedAfter?: (JWTTimestamp: number) => boolean;
+}
+
+export interface IAddress {
+  id?: string | mongoose.Types.ObjectId;
+  alias?: string;
+  detailAddress?: string;
+  phoneNumber?: string;
+  city?: string;
+  postalCode?: string;
 }
