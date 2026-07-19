@@ -1,8 +1,8 @@
-import { Request } from "express";
+import type { Request } from "express";
 import User from "../models/user.model.ts";
 
 export const addToWishlist = async (req: Request) => {
-  const { productId } = req.params;
+  const { productId } = req.body;
   const { _id: userId } = req.user!;
 
   const user = await User.findByIdAndUpdate(
@@ -28,6 +28,7 @@ export const removeFromWishlist = async (req: Request) => {
   ).populate("wishlist");
   return user;
 };
+
 export const getWishlist = async (req: Request) => {
   const { _id: userId } = req.user!;
 
