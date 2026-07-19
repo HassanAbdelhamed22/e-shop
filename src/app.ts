@@ -11,6 +11,7 @@ import userRouter from "./routes/user.route.ts";
 import reviewRouter from "./routes/review.route.ts";
 import wishlistRouter from "./routes/wishlist.route.ts";
 import addressRouter from "./routes/address.route.ts";
+import couponRouter from "./routes/coupon.route.ts";
 import { globalError } from "./middlewares/error.middleware.ts";
 import { ApiError } from "./utils/apiError.ts";
 
@@ -40,6 +41,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
 app.use("/api/v1/addresses", addressRouter);
+app.use("/api/v1/coupons", couponRouter);
 
 // Handle invalid routes
 app.all("/*splat", (req, res, next) => {
