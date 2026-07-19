@@ -2,18 +2,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import morgan from "morgan";
-import authRouter from "./routes/auth.route.ts";
-import categoryRouter from "./routes/category.route.ts";
-import subCategoryRouter from "./routes/subCategory.route.ts";
-import brandRouter from "./routes/brand.route.ts";
-import productRouter from "./routes/product.route.ts";
-import userRouter from "./routes/user.route.ts";
-import reviewRouter from "./routes/review.route.ts";
-import wishlistRouter from "./routes/wishlist.route.ts";
-import addressRouter from "./routes/address.route.ts";
-import couponRouter from "./routes/coupon.route.ts";
 import { globalError } from "./middlewares/error.middleware.ts";
 import { ApiError } from "./utils/apiError.ts";
+import mountRoutes from "./routes/index.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,17 +22,8 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// Routes
-app.use("/api/v1/categories", categoryRouter);
-app.use("/api/v1/subcategories", subCategoryRouter);
-app.use("/api/v1/brands", brandRouter);
-app.use("/api/v1/products", productRouter);
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/reviews", reviewRouter);
-app.use("/api/v1/wishlist", wishlistRouter);
-app.use("/api/v1/addresses", addressRouter);
-app.use("/api/v1/coupons", couponRouter);
+//Routes
+mountRoutes(app);
 
 // Handle invalid routes
 app.all("/*splat", (req, res, next) => {
