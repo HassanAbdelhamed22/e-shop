@@ -26,8 +26,30 @@ export const addProductToCart = async (req: Request, res: Response) => {
       ],
     });
   } else {
-    console.log("Cart exists");
-  }
+    // product exists in cart, increment quantity
+    const productExist = cart.cartItems.findIndex(
+      (item) => item.product?.toString() === productId && item.color === color,
+    );
 
-  // 2) Add product to cart
+    if (productExist !== -1) {
+      const cartItem = cart.cartItems[productExist];
+      cartItem.quantity += 1;
+      cart.cartItems[productExist] = cartItem;
+    } else {
+      // product does not exist in cart, add new product to cart
+      cart.cartItems.push({
+        product: productId,
+        price: product?.price,
+        color,
+      });
+    }
+  }
+  
+  await cart.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "Product added to cart successfully",
+    data: cart,
+  });
 };
