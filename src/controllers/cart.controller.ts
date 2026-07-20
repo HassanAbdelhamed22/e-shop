@@ -44,11 +44,19 @@ export const addProductToCart = async (req: Request, res: Response) => {
       });
     }
   }
-  
+
+  // Calculate Total Cart Price
+  let totalPrice = 0;
+  cart.cartItems.forEach((item: any) => {
+    totalPrice += item?.price * item?.quantity;
+  });
+
+  cart.totalCartPrice = totalPrice;
+
   await cart.save();
 
   res.status(200).json({
-    status: "success",
+    success: true,
     message: "Product added to cart successfully",
     data: cart,
   });
