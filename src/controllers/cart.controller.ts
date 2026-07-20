@@ -2,6 +2,15 @@ import type { Request, Response } from "express";
 import { cartModel } from "../models/cart.model.ts";
 import Product from "../models/product.model.ts";
 
+const calcTotalPrice = (cart: any) => {
+  let totalPrice = 0;
+  cart.cartItems.forEach((item: any) => {
+    totalPrice += item?.price * item?.quantity;
+  });
+
+  return totalPrice;
+};
+
 /**
  * @desc    add product to cart
  * @route   POST /api/v1/cart
@@ -46,11 +55,7 @@ export const addProductToCart = async (req: Request, res: Response) => {
   }
 
   // Calculate Total Cart Price
-  let totalPrice = 0;
-  cart.cartItems.forEach((item: any) => {
-    totalPrice += item?.price * item?.quantity;
-  });
-
+  const totalPrice = calcTotalPrice(cart);
   cart.totalCartPrice = totalPrice;
 
   await cart.save();
