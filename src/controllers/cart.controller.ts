@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { cartModel } from "../models/cart.model.ts";
 import Product from "../models/product.model.ts";
+import { ApiError } from "../utils/apiError.ts";
 
 const calcTotalPrice = (cart: any) => {
   let totalPrice = 0;
@@ -64,6 +65,26 @@ export const addProductToCart = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Product added to cart successfully",
+    data: cart,
+  });
+};
+
+/**
+ * @desc    get logged user cart
+ * @route   GET /api/v1/cart
+ * @access  Private
+ */
+export const getLoggedUserCart = async (req: Request, res: Response) => {
+  const cart = await cartModel.findOne({ user: req?.user?._id });
+
+  if (!cart) {
+    throw new ApiError("Cart not found", 404);
+  }
+
+  res.status(200).json({
+    success: true,
+    numberOfItems: cart.cartItems.length,
+    totalCartPrice: cart.totalCartPrice,
     data: cart,
   });
 };
