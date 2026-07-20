@@ -8,6 +8,8 @@ const calcTotalPrice = (cart: any) => {
     totalPrice += item?.price * item?.quantity;
   });
 
+  cart.totalCartPrice = totalPrice;
+
   return totalPrice;
 };
 
@@ -55,8 +57,7 @@ export const addProductToCart = async (req: Request, res: Response) => {
   }
 
   // Calculate Total Cart Price
-  const totalPrice = calcTotalPrice(cart);
-  cart.totalCartPrice = totalPrice;
+  calcTotalPrice(cart);
 
   await cart.save();
 
