@@ -8,6 +8,7 @@ import reviewRouter from "./review.route.ts";
 import wishlistRouter from "./wishlist.route.ts";
 import addressRouter from "./address.route.ts";
 import couponRouter from "./coupon.route.ts";
+import cartRouter from "./cart.route.ts";
 import type { Express } from "express";
 
 // Routes
@@ -22,6 +23,7 @@ const mountRoutes = (app: Express) => {
   app.use("/api/v1/wishlist", wishlistRouter);
   app.use("/api/v1/addresses", addressRouter);
   app.use("/api/v1/coupons", couponRouter);
+  app.use("/api/v1/cart", cartRouter);
 };
 
 export default mountRoutes;
