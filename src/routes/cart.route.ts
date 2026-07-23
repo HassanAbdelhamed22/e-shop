@@ -4,6 +4,7 @@ import {
   clearLoggedUserCart,
   getLoggedUserCart,
   removeSpecificCartItem,
+  updateCartItemQuantity,
 } from "../controllers/cart.controller.ts";
 
 import { protect } from "../middlewares/protect.middleware.ts";
@@ -18,6 +19,9 @@ router
   .post(addProductToCart)
   .get(getLoggedUserCart)
   .delete(clearLoggedUserCart);
-router.route("/:itemId").delete(removeSpecificCartItem);
+router
+  .route("/:itemId")
+  .put(updateCartItemQuantity)
+  .delete(removeSpecificCartItem);
 
 export default router;

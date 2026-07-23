@@ -141,3 +141,41 @@ export const clearLoggedUserCart = async (req: Request, res: Response) => {
     message: "Cart cleared successfully",
   });
 };
+
+/**
+ * @desc    update specific cart item quantity
+ * @route   PUT /api/v1/cart/:itemId
+ * @access  Private
+ */
+export const updateCartItemQuantity = async (req: Request, res: Response) => {
+  const { itemId } = req.params;
+  const { quantity } = req.body;
+  const cart = await cartModel.findOne({ user: req?.user?._id });
+
+  if (!cart) {
+    throw new ApiError("Cart not found", 404);
+  }
+
+  const itemIndex = cart.cartItems.findIndex(
+    (item) => item._id.toString() === itemId,
+  );
+
+  if (itemIndex === -1) {
+    throw new ApiError("Cart item not found", 404);
+  }
+
+  const item = cart.cartItems[itemIndex];
+  item.quantity = quantity;
+
+  cart.cartItems[itemIndex] = item;
+
+  calcTotalPrice(cart);
+
+  await cart.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Cart updated successfully",
+    data: cart,
+  });
+};
