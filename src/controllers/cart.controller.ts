@@ -123,3 +123,21 @@ export const removeSpecificCartItem = async (req: Request, res: Response) => {
     data: cart,
   });
 };
+
+/**
+ * @desc    clear logged user cart
+ * @route   DELETE /api/v1/cart
+ * @access  Private
+ */
+export const clearLoggedUserCart = async (req: Request, res: Response) => {
+  const cart = await cartModel.findOneAndDelete({ user: req?.user?._id });
+
+  if (!cart) {
+    throw new ApiError("Cart not found", 404);
+  }
+
+  res.status(204).json({
+    success: true,
+    message: "Cart cleared successfully",
+  });
+};

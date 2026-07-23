@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   addProductToCart,
+  clearLoggedUserCart,
   getLoggedUserCart,
   removeSpecificCartItem,
 } from "../controllers/cart.controller.ts";
@@ -12,7 +13,11 @@ const router = Router();
 
 router.use(protect, allowedTo("user"));
 
-router.route("/").post(addProductToCart).get(getLoggedUserCart);
+router
+  .route("/")
+  .post(addProductToCart)
+  .get(getLoggedUserCart)
+  .delete(clearLoggedUserCart);
 router.route("/:itemId").delete(removeSpecificCartItem);
 
 export default router;
