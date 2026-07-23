@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import "../types/index.ts";
 import { cartModel } from "../models/cart.model.ts";
 import Product from "../models/product.model.ts";
+import Coupon from "../models/coupon.model.ts";
 import { ApiError } from "../utils/apiError.ts";
 
 const calcTotalPrice = (cart: any) => {
@@ -11,6 +12,7 @@ const calcTotalPrice = (cart: any) => {
   });
 
   cart.totalCartPrice = totalPrice;
+  cart.totalCartPriceAfterDiscount = undefined;
 
   return totalPrice;
 };
@@ -176,6 +178,54 @@ export const updateCartItemQuantity = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Cart updated successfully",
+    data: cart,
+  });
+};
+
+/**
+ * @desc    Apply coupon on cart
+ * @route   PUT /api/v1/cart/apply-coupon
+ * @access  Private
+ */
+export const applyCoupon = async (req: Request, res: Response) => {
+  //1- Get the coupon from the database
+  const coupon = await Coupon.findOne({
+    name: req.body.coupon,
+    expire: { $gt: Date.now() },
+  });
+
+  //2- Check if the coupon is valid
+  if (!coupon) {
+    throw new ApiError("Coupon not found or expired", 404);
+  }
+
+  //3- Get logged user cart to get total cart price
+  const cart = await cartModel.findOne({ user: req?.user?._id });
+
+  if (!cart) {
+    throw new ApiError("Cart not found", 404);
+  }
+
+  const totalPrice = cart.totalCartPrice;
+
+  if (totalPrice === undefined || totalPrice === null) {
+    throw new ApiError("Cart total price is not defined", 400);
+  }
+
+  // 4- calculate price after discount
+  const priceAfterDiscount = (
+    totalPrice -
+    (totalPrice * coupon.discount) / 100
+  ).toFixed(2);
+
+  // 5- save the price after discount in cart
+  cart.totalCartPriceAfterDiscount = Number(priceAfterDiscount);
+
+  await cart.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Coupon applied successfully",
     data: cart,
   });
 };
