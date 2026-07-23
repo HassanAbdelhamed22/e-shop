@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import "../types/index.ts";
 import { cartModel } from "../models/cart.model.ts";
 import Product from "../models/product.model.ts";
 import { ApiError } from "../utils/apiError.ts";
@@ -85,6 +86,40 @@ export const getLoggedUserCart = async (req: Request, res: Response) => {
     success: true,
     numberOfItems: cart.cartItems.length,
     totalCartPrice: cart.totalCartPrice,
+    data: cart,
+  });
+};
+
+/**
+ * @desc    remove specific cart item
+ * @route   DELETE /api/v1/cart/:itemId
+ * @access  Private
+ */
+export const removeSpecificCartItem = async (req: Request, res: Response) => {
+  const { itemId } = req.params;
+  const cart = await cartModel.findOneAndUpdate(
+    { user: req?.user?._id },
+    {
+      $pull: {
+        cartItems: {
+          _id: itemId,
+        },
+      },
+    },
+    { new: true },
+  );
+
+  if (!cart) {
+    throw new ApiError("Cart not found", 404);
+  }
+
+  calcTotalPrice(cart);
+
+  await cart.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Product removed from cart successfully",
     data: cart,
   });
 };
