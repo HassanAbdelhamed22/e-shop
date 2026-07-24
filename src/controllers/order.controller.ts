@@ -1,20 +1,20 @@
 import type { Request, Response } from "express";
-import { cartModel } from "../models/cart.model";
-import { ApiError } from "../utils/apiError";
-import Order from "../models/order.model";
-import Product from "../models/product.model";
+import { cartModel } from "../models/cart.model.ts";
+import { ApiError } from "../utils/apiError.ts";
+import Order from "../models/order.model.ts";
+import Product from "../models/product.model.ts";
 
 /**
  * @desc    Create cash order
- * @route   POST /api/v1/orders/cardId
+ * @route   POST /api/v1/orders/:cartId
  * @access  Private
  */
 export const createCashOrder = async (req: Request, res: Response) => {
   const taxPrice = 0;
   const shippingPrice = 0;
 
-  // 1- Get card depend on cardId
-  const cart = await cartModel.findById(req.params.cardId);
+  // 1- Get cart depend on cartId
+  const cart = await cartModel.findById(req.params.cartId);
 
   if (!cart) {
     throw new ApiError("Cart not found", 404);
@@ -58,7 +58,7 @@ export const createCashOrder = async (req: Request, res: Response) => {
     await Product.bulkWrite(bulkOptions);
 
     // 5- Clear user cart
-    await cartModel.findByIdAndDelete(req.params.cardId);
+    await cartModel.findByIdAndDelete(req.params.cartId);
   }
 
   res.status(201).json({
