@@ -64,6 +64,17 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// Pre-populate populated fields
+orderSchema.pre(/^find/, function (this: any) {
+  this.populate({
+    path: "user",
+    select: "name email phone profileImage",
+  }).populate({
+    path: "cartItems.product",
+    select: "name price imageCover",
+  });
+});
+
 const Order = mongoose.model("Order", orderSchema);
 
 export default Order;
