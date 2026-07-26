@@ -1,8 +1,10 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { cartModel } from "../models/cart.model.ts";
 import { ApiError } from "../utils/apiError.ts";
 import Order from "../models/order.model.ts";
 import Product from "../models/product.model.ts";
+import * as controllerFactory from "./handlersFactory.ts";
+import "../types/index.ts";
 
 /**
  * @desc    Create cash order
@@ -67,3 +69,29 @@ export const createCashOrder = async (req: Request, res: Response) => {
     data: order,
   });
 };
+
+// @desc Filter orders for logged user
+export const filterOrderForloggedUser = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (req.user?.role === "user") {
+    req.filterObject = { user: req.user._id };
+  }
+  next();
+};
+
+/**
+ * @desc    Get all orders
+ * @route   GET /api/v1/orders
+ * @access  Private
+ */
+export const getAllOrders = controllerFactory.getAll(Order, "Order");
+
+/**
+ * @desc    Get Specific Order
+ * @route   GET /api/v1/orders/:id
+ * @access  Private
+ */
+export const getSpecificOrder = controllerFactory.getOne(Order);
