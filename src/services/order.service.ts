@@ -4,6 +4,8 @@ import { cartModel } from "../models/cart.model.ts";
 import Order from "../models/order.model.ts";
 import Product from "../models/product.model.ts";
 import { ApiError } from "../utils/apiError.ts";
+import { sendEmail } from "../utils/sendEmail.ts";
+import { getOrderReceiptTemplate } from "../utils/emailTemplate.ts";
 import Stripe from "stripe";
 
 let stripe: Stripe;
@@ -61,6 +63,19 @@ export const createCashOrder = async (req: Request) => {
 
     // 5- Clear user cart
     await cartModel.findByIdAndDelete(req.params.cartId);
+
+    // 6- Send receipt email
+    try {
+      await order.populate({
+        path: "cartItems.product",
+        select: "title price",
+      });
+      if (req.user?.email) {
+        await sendOrderReceiptEmail(order, req.user.email);
+      }
+    } catch (err) {
+      console.error("Failed to send order receipt email:", err);
+    }
   }
 
   return order;
@@ -216,4 +231,17 @@ export const getStripeSession = async (req: Request) => {
   });
 
   return session;
+};
+
+/**
+ * @desc    Send order receipt email to the customer
+ */
+export const sendOrderReceiptEmail = async (order: any, email: string) => {
+  const emailHtml = getOrderReceiptTemplate(order);
+
+  await sendEmail({
+    to: email,
+    subject: `Your receipt from E-Shop (Order #${order._id.toString().slice(-8).toUpperCase()})`,
+    html: emailHtml,
+  });
 };

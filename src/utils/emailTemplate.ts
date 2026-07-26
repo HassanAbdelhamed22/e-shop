@@ -65,3 +65,95 @@ export const getForgotPasswordTemplate = (userName: string, resetCode: string): 
 </body>
 </html>`;
 };
+
+export const getOrderReceiptTemplate = (order: any): string => {
+  const amountPaid = order.totalOrderPrice.toFixed(2);
+  const datePaid = new Date(order.createdAt).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+  const paymentMethod = order.paymentMethodType === "cash" ? "Cash" : "Card";
+
+  const itemsHtml = order.cartItems
+    .map((item: any) => {
+      const productTitle = item.product?.title || "Product";
+      const quantity = item.quantity;
+      const itemPrice = (item.price * quantity).toFixed(2);
+      const imageUrl = item.product?.imageCover
+        ? `${process.env.BASE_URL}/products/${item.product.imageCover}`
+        : "https://via.placeholder.com/150";
+
+      return `
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 14px;">
+          <div style="display: flex; align-items: center;">
+            <img src="${imageUrl}" alt="${productTitle}" style="width: 50px; height: 50px; border-radius: 6px; object-fit: cover; margin-right: 12px; border: 1px solid #e2e8f0;" />
+            <div>
+              <div style="font-weight: 600; color: #0f172a;">${productTitle}</div>
+              <div style="font-size: 13px; color: #64748b;">Qty: ${quantity}</div>
+            </div>
+          </div>
+          <span style="font-weight: 600; color: #0f172a;">E£${itemPrice}</span>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Receipt from E-Shop</title>
+  </head>
+  <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; color: #1e293b;">
+    <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); overflow: hidden; border: 1px solid #e2e8f0;">
+      <!-- Header Banner -->
+      <div style="background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); padding: 30px 20px; text-align: center;">
+        <div style="width: 60px; height: 60px; background: #ffffff; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+          <span style="font-size: 28px; line-height: 1;">🛒</span>
+        </div>
+      </div>
+      
+      <!-- Content -->
+      <div style="padding: 30px;">
+        <h1 style="font-size: 24px; font-weight: 700; text-align: center; margin-top: 10px; margin-bottom: 5px; color: #0f172a;">Receipt from E-Shop</h1>
+        <p style="text-align: center; font-size: 14px; color: #64748b; margin-bottom: 30px; margin-top: 0;">Receipt #${order._id.toString().slice(-8).toUpperCase()}</p>
+        
+        <!-- Info Grid -->
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px;">
+          <tr>
+            <td style="width: 33.33%; text-align: center; border-right: 1px solid #e2e8f0; padding: 10px 0;">
+              <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #64748b; margin-bottom: 5px; letter-spacing: 0.5px;">Amount Paid</div>
+              <div style="font-size: 15px; font-weight: 600; color: #0f172a;">E£${amountPaid}</div>
+            </td>
+            <td style="width: 33.33%; text-align: center; border-right: 1px solid #e2e8f0; padding: 10px 0;">
+              <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #64748b; margin-bottom: 5px; letter-spacing: 0.5px;">Date Paid</div>
+              <div style="font-size: 15px; font-weight: 600; color: #0f172a;">${datePaid}</div>
+            </td>
+            <td style="width: 33.33%; text-align: center; padding: 10px 0;">
+              <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #64748b; margin-bottom: 5px; letter-spacing: 0.5px;">Payment Method</div>
+              <div style="font-size: 15px; font-weight: 600; color: #0f172a;">${paymentMethod}</div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Summary -->
+        <div style="font-size: 12px; text-transform: uppercase; font-weight: 700; color: #64748b; margin-bottom: 15px; letter-spacing: 0.5px;">Summary</div>
+        <div style="background-color: #f8fafc; border-radius: 8px; padding: 20px; margin-bottom: 30px; border: 1px solid #f1f5f9;">
+          ${itemsHtml}
+          <div style="border-top: 1px solid #e2e8f0; margin: 15px 0;"></div>
+          <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; color: #0f172a;">
+            <span>Amount charged</span>
+            <span>E£${amountPaid}</span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; font-size: 13px; color: #64748b; border-top: 1px solid #f1f5f9; padding-top: 20px; margin-top: 25px;">
+          If you have any questions, contact us at <a href="mailto:progahmedelsayed@gmail.com" style="color: #1e3a8a; text-decoration: none; font-weight: 600;">progahmedelsayed@gmail.com</a>.
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>`;
+};
