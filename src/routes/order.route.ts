@@ -4,6 +4,9 @@ import {
   filterOrderForloggedUser,
   getAllOrders,
   getSpecificOrder,
+  updateOrderDeliverStatus,
+  updateOrderPaidStatus,
+  updateOrderStatus,
 } from "../controllers/order.controller.ts";
 
 import { protect } from "../middlewares/protect.middleware.ts";
@@ -26,5 +29,17 @@ router
 router
   .route("/:id")
   .get(allowedTo("user", "admin", "manager"), getSpecificOrder);
+
+router
+  .route("/:id/status")
+  .put(allowedTo("admin", "manager"), updateOrderStatus);
+
+router
+  .route("/:id/deliver")
+  .put(allowedTo("admin", "manager"), updateOrderDeliverStatus);
+
+router
+  .route("/:id/pay")
+  .put(allowedTo("admin", "manager"), updateOrderPaidStatus);
 
 export default router;
