@@ -5,11 +5,19 @@ import morgan from "morgan";
 import { globalError } from "./middlewares/error.middleware.ts";
 import { ApiError } from "./utils/apiError.ts";
 import mountRoutes from "./routes/index.ts";
+import cors from "cors";
+import compression from "compression";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.use(cors())
+
+app.options("*", cors())
+
+app.use(compression())
 
 app.set("query parser", "extended");
 
