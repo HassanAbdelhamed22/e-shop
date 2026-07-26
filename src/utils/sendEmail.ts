@@ -19,6 +19,7 @@ export async function sendEmail(options: any) {
     subject: options.subject,
     text: options.text,
     html: options.html,
+    attachments: options.attachments,
   };
 
   await transporter.sendMail(mailOptions);

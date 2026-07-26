@@ -69,7 +69,7 @@ export const createCashOrder = async (req: Request) => {
     try {
       await order.populate({
         path: "cartItems.product",
-        select: "title price",
+        select: "title price imageCover",
       });
       if (req.user?.email) {
         await sendOrderReceiptEmail(order, req.user.email);
@@ -235,9 +235,6 @@ export const getStripeSession = async (req: Request) => {
   return session;
 };
 
-/**
- * @desc    Send order receipt email to the customer
- */
 export const sendOrderReceiptEmail = async (order: any, email: string) => {
   const emailHtml = getOrderReceiptTemplate(order);
 
@@ -303,7 +300,7 @@ export const createCardOrder = async (session: Stripe.Checkout.Session) => {
     try {
       await order.populate({
         path: "cartItems.product",
-        select: "title price",
+        select: "title price imageCover",
       });
       const emailRecipient = customerEmail || user?.email || "";
       if (emailRecipient) {
