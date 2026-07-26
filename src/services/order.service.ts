@@ -3,6 +3,7 @@ import "../types/index.ts";
 import { cartModel } from "../models/cart.model.ts";
 import Order from "../models/order.model.ts";
 import Product from "../models/product.model.ts";
+import User from "../models/user.model.ts";
 import { ApiError } from "../utils/apiError.ts";
 import { sendEmail } from "../utils/sendEmail.ts";
 import { getOrderReceiptTemplate } from "../utils/emailTemplate.ts";
@@ -223,6 +224,7 @@ export const getStripeSession = async (req: Request) => {
     customer_email: req.user?.email,
     client_reference_id: req.params.cartId as string,
     metadata: {
+      userId: req.user?._id?.toString() || "",
       city: req.body?.shippingAddress?.city || "",
       phone: req.body?.shippingAddress?.phone || "",
       address: req.body?.shippingAddress?.address || "",
@@ -244,4 +246,101 @@ export const sendOrderReceiptEmail = async (order: any, email: string) => {
     subject: `Your receipt from E-Shop (Order #${order._id.toString().slice(-8).toUpperCase()})`,
     html: emailHtml,
   });
+};
+
+/**
+ * @desc    Create card order after successful Stripe payment
+ */
+export const createCardOrder = async (session: Stripe.Checkout.Session) => {
+  const cartId = session.client_reference_id;
+  const customerEmail = session.customer_email || session.customer_details?.email;
+  const totalOrderPrice = (session.amount_total || 0) / 100;
+
+  const cart = await cartModel.findById(cartId);
+  if (!cart) {
+    throw new ApiError("Cart not found", 404);
+  }
+
+  const user = await User.findOne({ email: customerEmail });
+
+  const order = await Order.create({
+    user: user?._id || session.metadata?.userId,
+    cartItems: cart.cartItems,
+    totalOrderPrice,
+    shippingAddress: {
+      city: session.metadata?.city || "",
+      phone: session.metadata?.phone || "",
+      address: session.metadata?.address || "",
+      postalCode: session.metadata?.postalCode || "",
+    },
+    paymentMethodType: "card",
+    isPaid: true,
+    paidAt: new Date(),
+  });
+
+  // Decrement product quantity, and increment sold field
+  if (order) {
+    const bulkOptions = cart.cartItems.map((item) => {
+      return {
+        updateOne: {
+          filter: { _id: item.product },
+          update: {
+            $inc: {
+              quantity: -item.quantity,
+              sold: item.quantity,
+            },
+          },
+        },
+      };
+    });
+
+    await Product.bulkWrite(bulkOptions);
+
+    // Clear user cart
+    await cartModel.findByIdAndDelete(cartId);
+
+    // Send receipt email
+    try {
+      await order.populate({
+        path: "cartItems.product",
+        select: "title price",
+      });
+      const emailRecipient = customerEmail || user?.email || "";
+      if (emailRecipient) {
+        await sendOrderReceiptEmail(order, emailRecipient);
+      }
+    } catch (err) {
+      console.error("Failed to send order receipt email:", err);
+    }
+  }
+
+  return order;
+};
+
+/**
+ * @desc    Stripe webhook checkout completion service
+ */
+export const webhookCheckoutService = async (req: Request) => {
+  const sig = req.headers["stripe-signature"];
+
+  if (!stripe) {
+    stripe = new Stripe(process.env.STRIPE_SECRET!);
+  }
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig!,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (err: any) {
+    throw new ApiError(`Webhook Error: ${err.message}`, 400);
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    await createCardOrder(session);
+  }
 };

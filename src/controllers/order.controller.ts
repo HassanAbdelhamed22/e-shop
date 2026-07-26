@@ -104,3 +104,21 @@ export const getStripeSession = async (req: Request, res: Response) => {
     data: session,
   });
 };
+
+/**
+ * @desc    Stripe webhook checkout completion handler
+ * @route   POST /webhook-checkout
+ * @access  Public
+ */
+export const webhookCheckout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    await orderService.webhookCheckoutService(req);
+    res.status(200).json({ received: true });
+  } catch (err: any) {
+    res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+};
