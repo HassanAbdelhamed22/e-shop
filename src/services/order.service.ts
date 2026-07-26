@@ -219,8 +219,8 @@ export const getStripeSession = async (req: Request) => {
       },
     ],
     mode: "payment",
-    success_url: `${process.env.BASE_URL}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.BASE_URL}/orders/cancel`,
+    success_url: `${process.env.BASE_URL}/api/v1/orders/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.BASE_URL}/api/v1/orders/cancel`,
     customer_email: req.user?.email,
     client_reference_id: req.params.cartId as string,
     metadata: {
