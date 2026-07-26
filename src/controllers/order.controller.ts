@@ -3,6 +3,7 @@ import Order from "../models/order.model.ts";
 import * as controllerFactory from "./handlersFactory.ts";
 import * as orderService from "../services/order.service.ts";
 import "../types/index.ts";
+import { successHtmlTemplate, cancelHtmlTemplate } from "../utils/htmlTemplates.ts";
 
 /**
  * @desc    Create cash order
@@ -121,4 +122,22 @@ export const webhookCheckout = async (
   } catch (err: any) {
     res.status(400).send(`Webhook Error: ${err.message}`);
   }
+};
+
+/**
+ * @desc    Get Stripe checkout success page
+ * @route   GET /api/v1/orders/success
+ * @access  Public
+ */
+export const getSuccessPage = (req: Request, res: Response) => {
+  res.send(successHtmlTemplate);
+};
+
+/**
+ * @desc    Get Stripe checkout cancel page
+ * @route   GET /api/v1/orders/cancel
+ * @access  Public
+ */
+export const getCancelPage = (req: Request, res: Response) => {
+  res.send(cancelHtmlTemplate);
 };
