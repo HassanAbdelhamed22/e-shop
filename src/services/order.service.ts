@@ -331,7 +331,7 @@ export const webhookCheckoutService = async (req: Request) => {
 
   try {
     event = stripe.webhooks.constructEvent(
-      req.body,
+      (req as any).rawBody || req.body,
       sig!,
       process.env.STRIPE_WEBHOOK_SECRET!
     );

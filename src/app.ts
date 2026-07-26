@@ -22,7 +22,15 @@ app.use(compression())
 app.set("query parser", "extended");
 
 // Middlewares
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req: any, res, buf) => {
+      if (req.originalUrl.includes("webhook")) {
+        req.rawBody = buf;
+      }
+    },
+  })
+);
 
 app.use(express.static(path.join(__dirname, "..", "uploads")));
 

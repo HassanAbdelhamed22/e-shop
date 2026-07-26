@@ -20,11 +20,7 @@ import { allowedTo } from "../middlewares/allowedTo.middleware.ts";
 const router = Router();
 
 // Public routes (No authentication needed)
-router.post(
-  "/webhook-checkout",
-  express.raw({ type: "application/json" }),
-  webhookCheckout
-);
+router.post("/webhook-checkout", webhookCheckout);
 router.get("/success", getSuccessPage);
 router.get("/cancel", getCancelPage);
 
