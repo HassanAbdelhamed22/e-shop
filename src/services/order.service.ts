@@ -4,6 +4,9 @@ import { cartModel } from "../models/cart.model.ts";
 import Order from "../models/order.model.ts";
 import Product from "../models/product.model.ts";
 import { ApiError } from "../utils/apiError.ts";
+import Stripe from "stripe";
+
+let stripe: Stripe;
 
 /**
  * @desc    Create cash order service
@@ -153,4 +156,64 @@ export const updateOrderStatus = async (req: Request) => {
   await order.save();
 
   return order;
+};
+
+/**
+ * @desc    Get Stripe session to create Stripe checkout page service
+ */
+export const getStripeSession = async (req: Request) => {
+  const taxPrice = 0;
+  const shippingPrice = 0;
+
+  // 1- Get cart depend on cartId
+  const cart = await cartModel.findById(req.params.cartId);
+
+  if (!cart) {
+    throw new ApiError("Cart not found", 404);
+  }
+
+  // 2- Get order price depend on cart price "check if coupon applied"
+  const orderPrice = cart.totalCartPriceAfterDiscount
+    ? cart.totalCartPriceAfterDiscount
+    : cart.totalCartPrice;
+
+  if (!orderPrice) {
+    throw new ApiError("Cart is empty", 400);
+  }
+
+  const totalOrderPrice = orderPrice + taxPrice + shippingPrice;
+
+  // 3- Create stripe session
+  if (!stripe) {
+    stripe = new Stripe(process.env.STRIPE_SECRET!);
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "egp",
+          unit_amount: totalOrderPrice * 100,
+          product_data: {
+            name: req.user?.name || "Customer Order",
+          },
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${process.env.BASE_URL}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.BASE_URL}/orders/cancel`,
+    customer_email: req.user?.email,
+    client_reference_id: req.params.cartId as string,
+    metadata: {
+      city: req.body?.shippingAddress?.city || "",
+      phone: req.body?.shippingAddress?.phone || "",
+      address: req.body?.shippingAddress?.address || "",
+      postalCode: req.body?.shippingAddress?.postalCode || "",
+    },
+  });
+
+  return session;
 };

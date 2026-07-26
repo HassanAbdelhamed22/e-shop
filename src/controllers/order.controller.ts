@@ -89,3 +89,18 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     data: order,
   });
 };
+
+/**
+ * @desc    Get Stripe session to create Stripe checkout page
+ * @route   GET /api/v1/orders/:cartId/checkout-session
+ * @access  Private
+ */
+export const getStripeSession = async (req: Request, res: Response) => {
+  const session = await orderService.getStripeSession(req);
+
+  res.status(200).json({
+    success: true,
+    message: "Stripe session created successfully",
+    data: session,
+  });
+};

@@ -4,6 +4,7 @@ import {
   filterOrderForloggedUser,
   getAllOrders,
   getSpecificOrder,
+  getStripeSession,
   updateOrderDeliverStatus,
   updateOrderPaidStatus,
   updateOrderStatus,
@@ -41,5 +42,9 @@ router
 router
   .route("/:id/pay")
   .put(allowedTo("admin", "manager"), updateOrderPaidStatus);
+
+router
+  .route("/:cartId/checkout-session")
+  .get(allowedTo("user"), getStripeSession);
 
 export default router;
