@@ -13,23 +13,24 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
-app.options("/*splat", cors())
+app.options("/*splat", cors());
 
-app.use(compression())
+app.use(compression());
 
 app.set("query parser", "extended");
 
 // Middlewares
 app.use(
   express.json({
+    limit: "20kb",
     verify: (req: any, res, buf) => {
       if (req.originalUrl.includes("webhook")) {
         req.rawBody = buf;
       }
     },
-  })
+  }),
 );
 
 app.use(express.static(path.join(__dirname, "..", "uploads")));
