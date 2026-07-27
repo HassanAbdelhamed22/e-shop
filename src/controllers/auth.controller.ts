@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import * as authService from "../services/auth.service.ts";
 import type { IUser } from "../types/index.ts";
+import { sanitizeUser } from "../utils/sanitizeData.ts";
 
 /**
  * @desc    signup user
@@ -25,7 +26,7 @@ export const signup = async (
     status: "success",
     message: "User created successfully",
     token,
-    data: user,
+    data: sanitizeUser(user),
   });
 };
 
@@ -47,7 +48,7 @@ export const login = async (
     status: "success",
     message: "User logged in successfully",
     token,
-    data: user,
+    data: sanitizeUser(user),
   });
 };
 

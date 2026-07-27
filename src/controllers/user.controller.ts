@@ -9,6 +9,7 @@ import { ApiError } from "../utils/apiError.ts";
 import type { UpdateUserData } from "../types/index.ts";
 import * as authService from "../services/auth.service.ts";
 import { generateToken } from "../utils/createToken.ts";
+import { sanitizeUser } from "../utils/sanitizeData.ts";
 
 export const uploadUserImg = uploadSingleImage("profileImage");
 
@@ -64,7 +65,7 @@ export const updateUser = async (
 
   res.status(200).json({
     success: true,
-    data: user,
+    data: sanitizeUser(user),
   });
 };
 
@@ -83,7 +84,7 @@ export const changeUserPassword = async (
   );
   res.status(200).json({
     success: true,
-    data: user,
+    data: sanitizeUser(user),
   });
 };
 
@@ -108,7 +109,7 @@ export const getMe = async (
 
   res.status(200).json({
     success: true,
-    data: user,
+    data: sanitizeUser(user),
   });
 };
 
@@ -132,7 +133,7 @@ export const updateMyPassword = async (
   res.status(200).json({
     success: true,
     token,
-    data: user,
+    data: sanitizeUser(user),
   });
 };
 
@@ -162,7 +163,7 @@ export const updateMyProfile = async (
   res.status(200).json({
     success: true,
     message: "Profile updated successfully",
-    data: user,
+    data: sanitizeUser(user),
   });
 };
 
