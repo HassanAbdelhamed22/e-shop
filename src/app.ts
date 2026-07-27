@@ -8,6 +8,7 @@ import mountRoutes from "./routes/index.ts";
 import cors from "cors";
 import compression from "compression";
 import hpp from "hpp";
+import mongoSanitize from "express-mongo-sanitize";
 import { limiter, authLimiter } from "./middlewares/rateLimit.middleware.ts";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,6 +38,9 @@ app.use(
     },
   }),
 );
+
+// Middleware to protect against NoSQL injection attacks
+app.use(mongoSanitize());
 
 app.use(express.static(path.join(__dirname, "..", "uploads")));
 
