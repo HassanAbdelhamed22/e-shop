@@ -32,4 +32,12 @@ const cartSchema = new Schema(
   { timestamps: true },
 );
 
+// Pre-populate product details on queries
+cartSchema.pre(/^find/, function (this: any) {
+  this.populate({
+    path: "cartItems.product",
+    select: "title price imageCover",
+  });
+});
+
 export const cartModel = model("Cart", cartSchema);
