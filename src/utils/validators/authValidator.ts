@@ -8,7 +8,9 @@ export const signupValidator = [
     .notEmpty()
     .withMessage("User name is required")
     .isLength({ min: 3, max: 100 })
-    .withMessage("User name must be between 3 and 100 characters"),
+    .withMessage("User name must be between 3 and 100 characters")
+    .trim()
+    .escape(),
   check("email")
     .notEmpty()
     .withMessage("Email is required")

@@ -16,12 +16,16 @@ export const createProductValidator = [
     .notEmpty()
     .withMessage("Product name is required")
     .isLength({ min: 3, max: 100 })
-    .withMessage("Product name must be between 3 and 100 characters"),
+    .withMessage("Product name must be between 3 and 100 characters")
+    .trim()
+    .escape(),
   check("description")
     .notEmpty()
     .withMessage("Product description is required")
     .isLength({ min: 20, max: 1000 })
-    .withMessage("Product description must be between 20 and 1000 characters"),
+    .withMessage("Product description must be between 20 and 1000 characters")
+    .trim()
+    .escape(),
   check("price")
     .notEmpty()
     .withMessage("Product price is required")

@@ -9,12 +9,16 @@ import cors from "cors";
 import compression from "compression";
 import hpp from "hpp";
 import mongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
 import { limiter, authLimiter } from "./middlewares/rateLimit.middleware.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Set security HTTP headers
+app.use(helmet());
 
 // Trust proxy headers if behind Nginx/Cloudflare/etc.
 app.set("trust proxy", 1);
@@ -39,7 +43,16 @@ app.use(
   }),
 );
 
-// Middleware to protect against NoSQL injection attacks
+// Middleware to protect against NoSQL injection attacks (with Express 5 compatibility)
+app.use((req, res, next) => {
+  Object.defineProperty(req, "query", {
+    value: { ...req.query },
+    writable: true,
+    configurable: true,
+    enumerable: true,
+  });
+  next();
+});
 app.use(mongoSanitize());
 
 app.use(express.static(path.join(__dirname, "..", "uploads")));
