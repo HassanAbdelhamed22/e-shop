@@ -7,6 +7,7 @@ import { ApiError } from "./utils/apiError.ts";
 import mountRoutes from "./routes/index.ts";
 import cors from "cors";
 import compression from "compression";
+import hpp from "hpp";
 import { limiter, authLimiter } from "./middlewares/rateLimit.middleware.ts";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +48,28 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api", limiter);
 app.use("/api/v1/auth/login", authLimiter);
 app.use("/api/v1/auth/forgot-password", authLimiter);
+
+// Middleware to protect against HTTP Parameter Pollution attacks
+app.use(
+  hpp({
+    whitelist: [
+      "price",
+      "priceAfterDiscount",
+      "ratingsQuantity",
+      "ratingsAverage",
+      "sold",
+      "quantity",
+      "brand",
+      "category",
+      "subCategories",
+      "colors",
+      "sizes",
+      "ratings",
+      "createdAt",
+      "updatedAt",
+    ],
+  }),
+);
 
 //Routes
 mountRoutes(app);
