@@ -44,6 +44,18 @@ To serve as a robust, high-performance API supporting product listing, inventory
 
 ## 2. Technology Stack
 
+<p align="left">
+  <img src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/express-%23000000.svg?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
+  <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=stripe&logoColor=white" alt="Stripe" />
+  <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens" alt="JWT" />
+  <img src="https://img.shields.io/badge/Nodemailer-007ACC?style=for-the-badge" alt="Nodemailer" />
+  <img src="https://img.shields.io/badge/Multer-grey?style=for-the-badge" alt="Multer" />
+  <img src="https://img.shields.io/badge/Sharp-green?style=for-the-badge" alt="Sharp" />
+</p>
+
 - **Runtime Environment**: Node.js (>= 18.0.0)
 - **Application Framework**: Express.js (v5)
 - **Database & ODM**: MongoDB & Mongoose
@@ -128,32 +140,25 @@ The codebase is structured around a clear separation of concerns:
 ```
 
 ### Request Lifecycle
-```
-Client Request
-      │
-      ▼
-Express Route (src/routes/)
-      │
-      ▼
-Protect/AllowedTo middlewares (checks token signatures, roles, etc.)
-      │
-      ▼
-Input Validation (src/utils/validators/ validator chains & catcher middleware)
-      │
-      ▼
-Controller (src/controllers/ parses inputs, interacts with services, formats JSON outputs)
-      │
-      ▼
-Service Layer (src/services/ executes calculations, Stripe card requests, email triggers)
-      │
-      ▼
-Database Layer (src/models/ writes documents using Mongoose, executes pre-save hooks)
-      │
-      ▼
-Response Formatting (src/utils/sanitizeData.ts removes internal system keys)
-      │
-      ▼
-Client Response (GZIP compressed & structured JSON)
+
+```mermaid
+graph TD
+    Client[Client Request] --> Route[Express Router]
+    Route --> AuthGuard{Auth/Roles Guard?}
+    AuthGuard -- Yes --> Middleware[Security Middleware]
+    AuthGuard -- No --> Middleware
+    Middleware --> Validation[express-validator Checks]
+    Validation --> Controller[Controller Method]
+    Controller --> Service[Service Processing]
+    Service --> DB[(MongoDB Database)]
+    DB --> Service
+    Service --> Sanitize[sanitizeData DTO]
+    Sanitize --> Compression[GZIP Compression]
+    Compression --> Response[JSON Response]
+
+    style Client fill:#f9f,stroke:#333,stroke-width:2px
+    style DB fill:#bbf,stroke:#333,stroke-width:2px
+    style Response fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
 ---
