@@ -67,10 +67,10 @@ export const createCashOrder = async (req: Request) => {
 
     // 6- Send receipt email
     try {
-      await order.populate({
-        path: "cartItems.product",
-        select: "title price imageCover",
-      });
+      await order.populate([
+        { path: "user", select: "name email phone profileImage" },
+        { path: "cartItems.product", select: "title price imageCover" },
+      ]);
       if (req.user?.email) {
         await sendOrderReceiptEmail(order, req.user.email);
       }
@@ -111,6 +111,10 @@ export const updateOrderDeliverStatus = async (req: Request) => {
   }
 
   await order.save();
+  await order.populate([
+    { path: "user", select: "name email phone profileImage" },
+    { path: "cartItems.product", select: "title price imageCover" },
+  ]);
 
   return order;
 };
@@ -133,6 +137,10 @@ export const updateOrderPaidStatus = async (req: Request) => {
   order.paidAt = new Date();
 
   await order.save();
+  await order.populate([
+    { path: "user", select: "name email phone profileImage" },
+    { path: "cartItems.product", select: "title price imageCover" },
+  ]);
 
   return order;
 };
@@ -170,6 +178,10 @@ export const updateOrderStatus = async (req: Request) => {
 
   order.orderStatus = orderStatus;
   await order.save();
+  await order.populate([
+    { path: "user", select: "name email phone profileImage" },
+    { path: "cartItems.product", select: "title price imageCover" },
+  ]);
 
   return order;
 };

@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as cartService from "../services/cart.service.ts";
+import { sanitizeCart } from "../utils/sanitizeData.ts";
 
 /**
  * @desc    add product to cart
@@ -12,7 +13,7 @@ export const addProductToCart = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Product added to cart successfully",
-    data: cart,
+    data: sanitizeCart(cart),
   });
 };
 
@@ -28,7 +29,7 @@ export const getLoggedUserCart = async (req: Request, res: Response) => {
     success: true,
     numberOfItems: cart.cartItems.length,
     totalCartPrice: cart.totalCartPrice,
-    data: cart,
+    data: sanitizeCart(cart),
   });
 };
 
@@ -43,7 +44,7 @@ export const removeSpecificCartItem = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Product removed from cart successfully",
-    data: cart,
+    data: sanitizeCart(cart),
   });
 };
 
@@ -72,7 +73,7 @@ export const updateCartItemQuantity = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Cart updated successfully",
-    data: cart,
+    data: sanitizeCart(cart),
   });
 };
 
@@ -87,6 +88,6 @@ export const applyCoupon = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Coupon applied successfully",
-    data: cart,
+    data: sanitizeCart(cart),
   });
 };

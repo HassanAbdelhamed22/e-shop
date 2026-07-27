@@ -4,6 +4,7 @@ import * as controllerFactory from "./handlersFactory.ts";
 import * as orderService from "../services/order.service.ts";
 import "../types/index.ts";
 import { successHtmlTemplate, cancelHtmlTemplate } from "../utils/htmlTemplates.ts";
+import { sanitizeOrder } from "../utils/sanitizeData.ts";
 
 /**
  * @desc    Create cash order
@@ -16,7 +17,7 @@ export const createCashOrder = async (req: Request, res: Response) => {
   res.status(201).json({
     success: true,
     message: "Order created successfully",
-    data: order,
+    data: sanitizeOrder(order),
   });
 };
 
@@ -57,7 +58,7 @@ export const updateOrderDeliverStatus = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Order status updated to delivered successfully",
-    data: order,
+    data: sanitizeOrder(order),
   });
 };
 
@@ -72,7 +73,7 @@ export const updateOrderPaidStatus = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Order payment status updated to paid successfully",
-    data: order,
+    data: sanitizeOrder(order),
   });
 };
 
@@ -87,7 +88,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: `Order status updated to ${order.orderStatus} successfully`,
-    data: order,
+    data: sanitizeOrder(order),
   });
 };
 
